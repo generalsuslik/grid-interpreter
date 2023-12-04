@@ -1,0 +1,7 @@
+REPEAT 5
+    IFBLOCK RIGHT
+        REPEAT 3
+            RIGHT 2
+        ENDREPEAT
+    ENDIF
+ENDREPEAT
