@@ -1,7 +1,17 @@
-REPEAT 5
-    IFBLOCK RIGHT
-        REPEAT 3
-            RIGHT 2
+
+SET X = 2
+SET Y = 3
+
+PROCEDURE GaySex
+    REPEAT X
+        UP 2
+        REPEAT Y
+            LEFT 9
         ENDREPEAT
-    ENDIF
-ENDREPEAT
+    ENDREPEAT
+ENDPROCEDURE
+
+
+CALL GaySex
+
+
