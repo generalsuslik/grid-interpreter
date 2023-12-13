@@ -1,6 +1,6 @@
 from collections import defaultdict
 
-from grid import Grid
+from .grid import Grid
 
 
 class Interpreter:
@@ -10,7 +10,6 @@ class Interpreter:
     array of all static stuff and if-blocks.
 
     TODO: loops in procedures
-    TODO: variables declaration(for example: SET X 12)
     """
     def __init__(self, program_file):
         self.grid = Grid()
@@ -266,7 +265,7 @@ class Interpreter:
         return f"{self.final_executable_commands}"
 
 
-program = Interpreter("program.txt")
+program = Interpreter("programs/program.txt")
 program.get_procedures()
 program.first_parse(program.commands)
 program.second_parse()
