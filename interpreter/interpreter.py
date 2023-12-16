@@ -1,6 +1,6 @@
 from collections import defaultdict
 
-from .grid import Grid
+from grid import Grid
 
 
 class Interpreter:
@@ -9,8 +9,6 @@ class Interpreter:
     procedures with get_procedures method, then u have to run parse method,
     to remove all loops and procedures calls. After that, you'll have an
     array of all static stuff and if-blocks.
-
-    TODO: loops in procedures
     """
     def __init__(self, program_file):
         self.grid = Grid()
@@ -23,6 +21,7 @@ class Interpreter:
         self.final_executable_commands = []
         self.functions = defaultdict(list)
         self.variables = {}
+        self.coordinates = [(0, 0)]
 
     def get_procedures(self):
         index = 0
@@ -284,13 +283,70 @@ class Interpreter:
 
             index += 1
 
+    def execute(self):
+        self.get_procedures()
+        self.first_parse(self.commands)
+        self.second_parse()
+
+        i = 0
+        while i < len(self.final_executable_commands):
+            command = self.final_executable_commands[i]
+            command_split = command.split()
+            if command_split[0] in ["UP", "DOWN", "LEFT", "RIGHT"]:
+                self.grid.move(command_split[0], int(command_split[1]))
+                self.coordinates.append((self.grid.x, self.grid.y))
+
+            if command_split[0] == "IFBLOCK":
+                block_direction = command_split[1]
+                endifblock_index = self.final_executable_commands[i:].index("ENDIF")
+                match block_direction:
+                    case "UP":
+                        if self.grid.y < 20:
+                            self.final_executable_commands.pop(endifblock_index)
+                            i += 1
+                            continue
+
+                        else:
+                            i = endifblock_index + 1
+                            continue
+
+                    case "DOWN":
+                        if self.grid.y > 0:
+                            self.final_executable_commands.pop(endifblock_index)
+                            i += 1
+                            continue
+
+                        else:
+                            i = endifblock_index + 1
+                            continue
+
+                    case "RIGHT":
+                        if self.grid.x < 20:
+                            self.final_executable_commands.pop(endifblock_index)
+                            i += 1
+                            continue
+
+                        else:
+                            i = endifblock_index + 1
+                            continue
+
+                    case "LEFT":
+                        if self.grid.x > 0:
+                            self.final_executable_commands.pop(endifblock_index)
+                            i += 1
+                            continue
+
+                        else:
+                            i = endifblock_index + 1
+                            continue
+
+            i += 1
+
     def __str__(self):
         return f"{self.final_executable_commands}"
 
 
 if __name__ == "__main__":
     program = Interpreter("programs/program.txt")
-    program.get_procedures()
-    program.first_parse(program.commands)
-    program.second_parse()
+    program.execute()
     print(program)

@@ -33,5 +33,8 @@ class Grid:
                 else:
                     raise ValueError
 
+    def get_coords(self):
+        return self.x, self.y
+
     def __str__(self):
         return f"{self.x} {self.y}"

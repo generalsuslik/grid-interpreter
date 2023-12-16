@@ -6,10 +6,14 @@ PROCEDURE GaySex
     REPEAT X
         UP 2
         REPEAT Y
-            LEFT 9
+            RIGHT 1
         ENDREPEAT
     ENDREPEAT
 ENDPROCEDURE
+
+IFBLOCK LEFT
+    RIGHT 5
+ENDIF
 
 
 CALL GaySex
