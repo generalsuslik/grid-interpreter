@@ -10,7 +10,7 @@ class Interpreter:
     to remove all loops and procedures calls. After that, you'll have an
     array of all static stuff and if-blocks.
     """
-    def __init__(self, program_file):
+    def __init__(self):
         self.grid = grid.Grid()
         self.commands = []
         self.executable_commands = []
@@ -18,14 +18,6 @@ class Interpreter:
         self.functions = defaultdict(list)
         self.variables = {}
         self.coordinates = [(0, 0)]
-
-        with open(program_file, "a") as file:
-            file.write("\n")
-
-        with open(program_file, "r") as file:
-            for line in file:
-                if len(line) > 2:
-                    self.commands.append(line[:-1].strip())
 
     # Variables declaration
     def get_variables(self):
@@ -364,11 +356,22 @@ class Interpreter:
 
             i += 1
 
+    def run(self, program_file):
+        with open(program_file, "a") as file:
+            file.write("\n")
+
+        with open(program_file, "r") as file:
+            for line in file:
+                if len(line) > 2:
+                    self.commands.append(line[:-1].strip())
+
+        self.execute()
+
     def __str__(self):
         return f"{self.coordinates}"
 
 
 if __name__ == "__main__":
-    program = Interpreter("./programs/program1.txt")
-    program.execute()
+    program = Interpreter()
+    program.run("./programs/program1.txt")
     print(program)
