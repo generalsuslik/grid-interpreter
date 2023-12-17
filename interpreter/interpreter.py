@@ -31,7 +31,7 @@ class Interpreter:
                 procedure_name = command_split[1]
                 procedure_body = []
                 index += 1
-                while self.commands[index] != "ENDPROCEDURE":
+                while self.commands[index] != "ENDPROC":
                     procedure_body.append(self.commands[index])
                     index += 1
 
@@ -133,7 +133,7 @@ class Interpreter:
             # Skip PROCEDURES declaration
             elif split_command[0] == "PROCEDURE":
                 index += 1
-                while commands_array[index] != "ENDPROCEDURE":
+                while commands_array[index] != "ENDPROC":
                     index += 1
 
                 index += 1
@@ -343,7 +343,7 @@ class Interpreter:
             i += 1
 
     def __str__(self):
-        return f"{self.final_executable_commands}"
+        return f"{self.coordinates}"
 
 
 if __name__ == "__main__":
