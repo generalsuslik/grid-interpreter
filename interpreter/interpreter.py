@@ -1,6 +1,6 @@
 from collections import defaultdict
 
-from grid import Grid
+import grid
 
 
 class Interpreter:
@@ -11,17 +11,38 @@ class Interpreter:
     array of all static stuff and if-blocks.
     """
     def __init__(self, program_file):
-        self.grid = Grid()
-        self.commands = [
-            i[:-1].strip()
-            for i in open(program_file).readlines()
-            if len(i) > 2
-        ]
+        self.grid = grid.Grid()
+        self.commands = []
         self.executable_commands = []
         self.final_executable_commands = []
         self.functions = defaultdict(list)
         self.variables = {}
         self.coordinates = [(0, 0)]
+
+        with open(program_file, "a") as file:
+            file.write("\n")
+
+        with open(program_file, "r") as file:
+            for line in file:
+                if len(line) > 2:
+                    self.commands.append(line[:-1].strip())
+
+    # Variables declaration
+    def get_variables(self):
+        index = 0
+        while index < len(self.commands):
+            command = self.commands[index]
+            command_split = command.split()
+            if command_split[0] == "SET":
+                variable_name = command_split[1]
+                variable_value = int(command.split("=")[-1])
+                self.variables[variable_name] = variable_value
+
+                self.commands.pop(index)
+                continue
+
+            else:
+                index += 1
 
     def get_procedures(self):
         index = 0
@@ -123,12 +144,6 @@ class Interpreter:
                 continue
 
             # ########################LOOPS##############################
-
-            # Variables declaration
-            if split_command[0] == "SET":
-                variable_name = split_command[1]
-                variable_value = int(command.split("=")[-1])
-                self.variables[variable_name] = variable_value
 
             # Skip PROCEDURES declaration
             elif split_command[0] == "PROCEDURE":
@@ -284,6 +299,7 @@ class Interpreter:
             index += 1
 
     def execute(self):
+        self.get_variables()
         self.get_procedures()
         self.first_parse(self.commands)
         self.second_parse()
@@ -293,7 +309,13 @@ class Interpreter:
             command = self.final_executable_commands[i]
             command_split = command.split()
             if command_split[0] in ["UP", "DOWN", "LEFT", "RIGHT"]:
-                self.grid.move(command_split[0], int(command_split[1]))
+                if command_split[1] in self.variables.keys():
+                    value_to_move = self.variables[command_split[1]]
+
+                else:
+                    value_to_move = int(command_split[1])
+
+                self.grid.move(command_split[0], value_to_move)
                 self.coordinates.append((self.grid.x, self.grid.y))
 
             if command_split[0] == "IFBLOCK":
@@ -347,6 +369,6 @@ class Interpreter:
 
 
 if __name__ == "__main__":
-    program = Interpreter("programs/program.txt")
+    program = Interpreter("./programs/program1.txt")
     program.execute()
     print(program)
