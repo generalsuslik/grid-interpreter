@@ -1,4 +1,3 @@
-
 SET X = 2
 SET Y = 3
 
@@ -9,13 +8,10 @@ PROCEDURE GaySex
             RIGHT 1
         ENDREPEAT
     ENDREPEAT
-ENDPROCEDURE
+ENDPROC
 
 IFBLOCK LEFT
     RIGHT 5
 ENDIF
 
-
 CALL GaySex
-
-

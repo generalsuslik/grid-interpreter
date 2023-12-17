@@ -1,7 +1,11 @@
 import time
 
 from PyQt5 import QtWidgets, uic
+from PyQt5.Qsci import QsciScintilla
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QColor
+
+from .editor import Editor
 
 
 # crutch for normal button generation
@@ -23,6 +27,10 @@ class Ui(QtWidgets.QMainWindow):
         self.new_file_btn.clicked.connect(self.create_file)
         self.save_file_btn.clicked.connect(self.save_file)
         self.settings_btn.clicked.connect(self.open_settings)
+
+        self.code_field = Editor(self)
+        self.code_layout.addWidget(self.code_field)
+
         self.filename = ""
         self.recent_layout.setAlignment(Qt.AlignTop)
         self.generate_recent()
@@ -82,7 +90,7 @@ class Ui(QtWidgets.QMainWindow):
             )
         if self.filename:
             with open(self.filename, "w", encoding="utf-8") as f:
-                f.write(self.code_field.toPlainText())
+                f.write(self.code_field.text())
                 self.db.update_recent(self.filename, time.time())
 
     def open_settings(self, event):

@@ -40,7 +40,7 @@ color: white;</string>
     <item row="0" column="1">
      <layout class="QVBoxLayout" name="verticalLayout" stretch="3,1">
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,1,2,1">
+       <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,2,5,2">
         <item>
          <layout class="QVBoxLayout" name="ui_buttons">
           <property name="spacing">
@@ -238,6 +238,12 @@ QPushButton:pressed  {
          <layout class="QVBoxLayout" name="recent_layout">
           <item alignment="Qt::AlignTop">
            <widget class="QLabel" name="label">
+            <property name="minimumSize">
+             <size>
+              <width>250</width>
+              <height>0</height>
+             </size>
+            </property>
             <property name="font">
              <font>
               <pointsize>18</pointsize>
@@ -261,23 +267,7 @@ border-bottom: 1px solid grey;</string>
          </layout>
         </item>
         <item>
-         <layout class="QVBoxLayout" name="code_layout">
-          <item>
-           <widget class="QTextEdit" name="code_field">
-            <property name="font">
-             <font>
-              <pointsize>11</pointsize>
-             </font>
-            </property>
-            <property name="documentTitle">
-             <string/>
-            </property>
-            <property name="placeholderText">
-             <string>Write your code here</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
+         <layout class="QVBoxLayout" name="code_layout"/>
         </item>
         <item>
          <layout class="QVBoxLayout" name="preview_layout" stretch="2,1">
@@ -285,6 +275,12 @@ border-bottom: 1px solid grey;</string>
            <widget class="QLabel" name="image">
             <property name="enabled">
              <bool>true</bool>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>16777215</height>
+             </size>
             </property>
             <property name="styleSheet">
              <string notr="true"/>

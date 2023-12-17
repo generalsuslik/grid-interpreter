@@ -298,46 +298,46 @@ class Interpreter:
 
             if command_split[0] == "IFBLOCK":
                 block_direction = command_split[1]
-                endifblock_index = self.final_executable_commands[i:].index("ENDIF")
+                endif_index = self.final_executable_commands[i:].index("ENDIF")
                 match block_direction:
                     case "UP":
                         if self.grid.y < 20:
-                            self.final_executable_commands.pop(endifblock_index)
+                            self.final_executable_commands.pop(endif_index)
                             i += 1
                             continue
 
                         else:
-                            i = endifblock_index + 1
+                            i = endif_index + 1
                             continue
 
                     case "DOWN":
                         if self.grid.y > 0:
-                            self.final_executable_commands.pop(endifblock_index)
+                            self.final_executable_commands.pop(endif_index)
                             i += 1
                             continue
 
                         else:
-                            i = endifblock_index + 1
+                            i = endif_index + 1
                             continue
 
                     case "RIGHT":
                         if self.grid.x < 20:
-                            self.final_executable_commands.pop(endifblock_index)
+                            self.final_executable_commands.pop(endif_index)
                             i += 1
                             continue
 
                         else:
-                            i = endifblock_index + 1
+                            i = endif_index + 1
                             continue
 
                     case "LEFT":
                         if self.grid.x > 0:
-                            self.final_executable_commands.pop(endifblock_index)
+                            self.final_executable_commands.pop(endif_index)
                             i += 1
                             continue
 
                         else:
-                            i = endifblock_index + 1
+                            i = endif_index + 1
                             continue
 
             i += 1
