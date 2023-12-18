@@ -1,5 +1,6 @@
 from collections import defaultdict
 
+import errors
 import grid
 
 
@@ -10,6 +11,7 @@ class Interpreter:
     to remove all loops and procedures calls. After that, you'll have an
     array of all static stuff and if-blocks.
     """
+
     def __init__(self):
         self.grid = grid.Grid()
         self.commands = []
@@ -290,7 +292,9 @@ class Interpreter:
 
             index += 1
 
-    def execute(self):
+    def execute(self, program_file: str) -> (None | errors.Error |
+                                             list[tuple[int, int]]):
+        self.load_file(program_file)
         self.get_variables()
         self.get_procedures()
         self.first_parse(self.commands)
@@ -307,12 +311,22 @@ class Interpreter:
                 else:
                     value_to_move = int(command_split[1])
 
-                self.grid.move(command_split[0], value_to_move)
+                error = self.grid.move(command_split[0], value_to_move)
+                if error is not None:
+                    print(error)
+                    return error
+
                 self.coordinates.append((self.grid.x, self.grid.y))
 
             if command_split[0] == "IFBLOCK":
                 block_direction = command_split[1]
-                endif_index = self.final_executable_commands[i:].index("ENDIF")
+                try:
+                    endif_index = self.final_executable_commands[i:].index("ENDIF")
+
+                except ValueError:
+                    print(errors.IFBlockNotClosedError("IFBlock was never closed"))
+                    return errors.IFBlockNotClosedError("IFBlock was never closed")
+
                 match block_direction:
                     case "UP":
                         if self.grid.y < 20:
@@ -356,7 +370,9 @@ class Interpreter:
 
             i += 1
 
-    def run(self, program_file):
+        return self.coordinates
+
+    def load_file(self, program_file: str) -> None:
         with open(program_file, "a") as file:
             file.write("\n")
 
@@ -365,13 +381,11 @@ class Interpreter:
                 if len(line) > 2:
                     self.commands.append(line[:-1].strip())
 
-        self.execute()
-
     def __str__(self):
         return f"{self.coordinates}"
 
 
 if __name__ == "__main__":
     program = Interpreter()
-    program.run("./programs/program1.txt")
-    print(program)
+    res = program.execute("./programs/out_of_bounds_error.txt")
+    print(res)
