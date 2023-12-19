@@ -56,8 +56,24 @@ class Interpreter:
 
             index += 1
 
-    def first_parse(self, commands_array):
+    def first_parse(self, commands_array) -> None | errors.Error:
         index = 0
+        # Check if there is a not closed or not opened repeat cycle error
+        count_repeat = 0
+        count_endrepeat = 0
+
+        for string in commands_array:
+            if string.startswith("REPEAT"):
+                count_repeat += 1
+
+            if string.startswith("ENDREPEAT"):
+                count_endrepeat += 1
+
+        if count_repeat != count_endrepeat:
+            return errors.RepeatNotClosedError(
+                                            "Your repeat cycle is not closed"
+                                        )
+
         while index < len(commands_array):
             command = commands_array[index]
             split_command = command.split()
@@ -99,7 +115,14 @@ class Interpreter:
                                 index += 1
                                 while commands_array[index] != "ENDREPEAT":
                                     cycle_body3.append(commands_array[index])
-                                    index += 1
+                                    try:
+                                        index += 1
+
+                                    except IndexError:
+                                        return errors.RepeatNotClosedError(
+                                            "Your repeat cycle is not closed"
+                                        )
+
                                 # escaping from "ENDREPEAT" in 3rd loop
                                 index += 1
                                 # Adding elements from 3rd loop
@@ -114,7 +137,13 @@ class Interpreter:
                             else:  # We quited 3rd loop, and now we're
                                 # able to continue working with 2nd loop
                                 cycle_body2.append(commands_array[index])
-                                index += 1
+                                try:
+                                    index += 1
+
+                                except IndexError:
+                                    return errors.RepeatNotClosedError(
+                                        "Your repeat cycle is not closed"
+                                    )
 
                         index += 1  # escaping from "ENDREPEAT" in 2nd loop
                         # Our 2nd loop has ended. Now we have to
@@ -128,7 +157,13 @@ class Interpreter:
                     else:  # We quited 2nd loop, and now we're able to
                         # continue working with 1st loop
                         cycle_body1.append(commands_array[index])
-                        index += 1
+                        try:
+                            index += 1
+
+                        except IndexError:
+                            return errors.RepeatNotClosedError(
+                                "Your repeat cycle is not closed"
+                            )
 
                 index += 1  # escaping from "ENDREPEAT" in 1st loop
                 for _ in range(n1):
@@ -194,6 +229,21 @@ class Interpreter:
 
     def second_parse(self):
         index = 0
+        # Check if there is a not closed or not opened repeat cycle error
+        count_repeat = 0
+        count_endrepeat = 0
+
+        for string in self.executable_commands:
+            if string.startswith("REPEAT"):
+                count_repeat += 1
+
+            if string.startswith("ENDREPEAT"):
+                count_endrepeat += 1
+
+        if count_repeat != count_endrepeat:
+            return errors.RepeatNotClosedError(
+                                            "Your repeat cycle is not closed"
+                                        )
         while index < len(self.executable_commands):
             command = self.executable_commands[index]
             split_command = command.split()
@@ -245,7 +295,13 @@ class Interpreter:
                                     cycle_body3.append(
                                         self.executable_commands[index]
                                     )
-                                    index += 1
+                                    try:
+                                        index += 1
+
+                                    except IndexError:
+                                        return errors.RepeatNotClosedError(
+                                            "Your repeat cycle is not closed"
+                                        )
                                     this_comm = self.executable_commands[index]
                                 # escaping from "ENDREPEAT" in 3rd loop
                                 index += 1
@@ -263,7 +319,13 @@ class Interpreter:
                                 cycle_body2.append(
                                     self.executable_commands[index]
                                 )
-                                index += 1
+                                try:
+                                    index += 1
+
+                                except IndexError:
+                                    return errors.RepeatNotClosedError(
+                                        "Your repeat cycle is not closed"
+                                    )
 
                         index += 1  # escaping from "ENDREPEAT" in 2nd loop
                         # Our 2nd loop has ended. Now we have to
@@ -277,7 +339,13 @@ class Interpreter:
                     else:  # We quited 2nd loop, and now we're able to
                         # continue working with 1st loop
                         cycle_body1.append(self.executable_commands[index])
-                        index += 1
+                        try:
+                            index += 1
+
+                        except IndexError:
+                            return errors.RepeatNotClosedError(
+                                "Your repeat cycle is not closed"
+                            )
 
                 index += 1  # escaping from "ENDREPEAT" in 1st loop
                 for _ in range(n1):
@@ -297,8 +365,14 @@ class Interpreter:
         self.load_file(program_file)
         self.get_variables()
         self.get_procedures()
-        self.first_parse(self.commands)
-        self.second_parse()
+        first_parse_error = self.first_parse(self.commands)
+        second_parse_error = self.second_parse()
+
+        if first_parse_error is not None:
+            return first_parse_error
+
+        if second_parse_error is not None:
+            return second_parse_error
 
         i = 0
         while i < len(self.final_executable_commands):
@@ -313,7 +387,6 @@ class Interpreter:
 
                 error = self.grid.move(command_split[0], value_to_move)
                 if error is not None:
-                    print(error)
                     return error
 
                 self.coordinates.append((self.grid.x, self.grid.y))
@@ -321,10 +394,9 @@ class Interpreter:
             if command_split[0] == "IFBLOCK":
                 block_direction = command_split[1]
                 try:
-                    endif_index = self.final_executable_commands[i:].index("ENDIF")
+                    endif_index = self.final_executable_commands[i:].index("ENDIF") + i
 
                 except ValueError:
-                    print(errors.IFBlockNotClosedError("IFBlock was never closed"))
                     return errors.IFBlockNotClosedError("IFBlock was never closed")
 
                 match block_direction:
@@ -387,5 +459,5 @@ class Interpreter:
 
 if __name__ == "__main__":
     program = Interpreter()
-    res = program.execute("./programs/out_of_bounds_error.txt")
+    res = program.execute("./programs/repeat_not_closed.txt")
     print(res)

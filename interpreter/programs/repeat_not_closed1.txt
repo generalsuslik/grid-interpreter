@@ -1,0 +1,16 @@
+PROCEDURE A
+
+    SET X = 12
+    REPEAT 2
+        REPEAT X
+            UP 2
+            REPEAT 5
+
+        ENDREPEAT
+    ENDREPEAT
+
+ENDPROC
+
+CALL A
+
+

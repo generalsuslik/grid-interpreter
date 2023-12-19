@@ -1,0 +1,21 @@
+REPEAT 2
+    SET X = 12
+    REPEAT X
+        UP 2
+    ENDREPEAT
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

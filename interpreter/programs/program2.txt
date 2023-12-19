@@ -1,0 +1,47 @@
+IFBLOCK LEFT
+
+    LEFT 2
+
+ENDIF
+
+SET X = 3
+
+REPEAT X
+
+    RIGHT 2
+    IFBLOCK UP
+
+        UP 10
+        REPEAT 2
+            LEFT 1
+        ENDREPEAT
+
+    ENDIF
+
+ENDREPEAT
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

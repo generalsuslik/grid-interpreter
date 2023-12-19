@@ -29,7 +29,7 @@ class ProcedureNotClosedError(Error):
         super().__init__(f"{self.__class__.__name__} --> {message}")
 
 
-class CycleNotClosedError(Error):
+class RepeatNotClosedError(Error):
     def __init__(self, message: str) -> None:
         super().__init__(f"{self.__class__.__name__} --> {message}")
 

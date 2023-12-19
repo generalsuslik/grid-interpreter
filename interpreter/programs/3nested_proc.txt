@@ -1,0 +1,31 @@
+PROCEDURE A
+    UP 2
+    CALL D
+ENDPROC
+
+PROCEDURE B
+
+    SET X = 3
+    RIGHT X
+    CALL A
+
+ENDPROC
+
+PROCEDURE C
+
+    UP 4
+    CALL B
+
+ENDPROC
+
+CALL C
+
+
+
+
+
+
+
+
+
+
