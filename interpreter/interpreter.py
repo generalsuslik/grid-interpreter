@@ -56,7 +56,7 @@ class Interpreter:
 
             index += 1
 
-    def first_parse(self, commands_array) -> None | errors.Error:
+    def first_parse(self, commands_array) -> None:
         index = 0
         # Check if there is a not closed or not opened repeat cycle error
         count_repeat = 0
@@ -70,9 +70,9 @@ class Interpreter:
                 count_endrepeat += 1
 
         if count_repeat != count_endrepeat:
-            return errors.RepeatNotClosedError(
-                                            "Your repeat cycle is not closed"
-                                        )
+            raise errors.RepeatNotClosedError(
+                "Your repeat cycle is not closed"
+            )
 
         while index < len(commands_array):
             command = commands_array[index]
@@ -119,9 +119,10 @@ class Interpreter:
                                         index += 1
 
                                     except IndexError:
-                                        return errors.RepeatNotClosedError(
-                                            "Your repeat cycle is not closed"
-                                        )
+                                        raise (
+                                            errors.RepeatNotClosedError(
+                                                "Your repeat cycle is not closed"
+                                            ))
 
                                 # escaping from "ENDREPEAT" in 3rd loop
                                 index += 1
@@ -141,7 +142,7 @@ class Interpreter:
                                     index += 1
 
                                 except IndexError:
-                                    return errors.RepeatNotClosedError(
+                                    raise errors.RepeatNotClosedError(
                                         "Your repeat cycle is not closed"
                                     )
 
@@ -161,7 +162,7 @@ class Interpreter:
                             index += 1
 
                         except IndexError:
-                            return errors.RepeatNotClosedError(
+                            raise errors.RepeatNotClosedError(
                                 "Your repeat cycle is not closed"
                             )
 
@@ -227,7 +228,7 @@ class Interpreter:
 
             index += 1
 
-    def second_parse(self):
+    def second_parse(self) -> None:
         index = 0
         # Check if there is a not closed or not opened repeat cycle error
         count_repeat = 0
@@ -242,8 +243,8 @@ class Interpreter:
 
         if count_repeat != count_endrepeat:
             raise errors.RepeatNotClosedError(
-                                            "Your repeat cycle is not closed"
-                                        )
+                "Your repeat cycle is not closed"
+            )
         while index < len(self.executable_commands):
             command = self.executable_commands[index]
             split_command = command.split()
@@ -365,14 +366,8 @@ class Interpreter:
         self.load_file(program_file)
         self.get_variables()
         self.get_procedures()
-        first_parse_error = self.first_parse(self.commands)
-        second_parse_error = self.second_parse()
-
-        if first_parse_error is not None:
-            return first_parse_error
-
-        if second_parse_error is not None:
-            return second_parse_error
+        self.first_parse(self.commands)
+        self.second_parse()
 
         i = 0
         while i < len(self.final_executable_commands):
@@ -385,11 +380,7 @@ class Interpreter:
                 else:
                     value_to_move = int(command_split[1])
 
-                try:
-                    self.grid.move(command_split[0], value_to_move)
-
-                except errors.Error:
-                    return
+                self.grid.move(command_split[0], value_to_move)
 
                 self.coordinates.append((self.grid.x, self.grid.y))
 
