@@ -6,12 +6,6 @@ import lark.exceptions
 from lark import Lark
 
 
-logging.basicConfig(
-    level=logging.WARNING,
-    format="%(asctime)s %(levelname)s %(message)s"
-)
-
-
 class Lexer(QsciLexerCustom):
     def __init__(self, parent=None):
         super().__init__(parent)

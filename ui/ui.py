@@ -1,7 +1,7 @@
+import logging
 import time
 
 from PyQt5 import QtWidgets, uic
-from PyQt5.Qsci import QsciScintilla
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QColor
 
@@ -19,9 +19,10 @@ class OpenHelper:
 
 
 class Ui(QtWidgets.QMainWindow):
-    def __init__(self, interpreter, db_manager):
+    def __init__(self, interpreter, db_manager, logger):
         super(Ui, self).__init__()
         self.db = db_manager
+        self.logger = logger
         self.interpreter = interpreter
         uic.loadUi("./ui/main.ui", self)
 
@@ -33,11 +34,14 @@ class Ui(QtWidgets.QMainWindow):
 
         self.code_field = Editor(self)
         self.code_layout.addWidget(self.code_field)
+        self.default_log_style = self.logs.currentCharFormat()
 
         self.filename = ""
         self.recent_layout.setAlignment(Qt.AlignTop)
         self.generate_recent()
         self.show()
+        self.log("Ida started up")
+        self.log("We're ready to go")
 
     def generate_recent(self):
         recent_files = self.db.get_recent()
@@ -97,9 +101,36 @@ class Ui(QtWidgets.QMainWindow):
         self.save_file(None)
         try:
             run_result = self.interpreter.execute(self.filename)
-            print(run_result)
+            self.log(run_result)
         except Exception as ex:
-            print(ex)
+            self.log(ex, level=logging.ERROR)
+
+    def log(self, text, level=logging.INFO):
+        self.logger.log(
+            level=level,
+            msg=text
+        )
+        match level:
+            case logging.INFO:
+                style = self.default_log_style
+                style.setForeground(QColor(160, 255, 160))
+                self.logs.setCurrentCharFormat(style)
+            case logging.WARNING:
+                style = self.default_log_style
+                style.setForeground(QColor(222, 222, 120))
+                self.logs.setCurrentCharFormat(style)
+            case logging.ERROR:
+                style = self.default_log_style
+                style.setForeground(QColor(222, 120, 120))
+                self.logs.setCurrentCharFormat(style)
+            case logging.CRITICAL:
+                style = self.default_log_style
+                style.setForeground(QColor(222, 120, 120))
+                style.setFontWeight(75)
+                self.logs.setCurrentCharFormat(style)
+        if level != logging.DEBUG:
+            self.logs.insertPlainText(f"Ida> {text}\n")
+            self.logs.setCurrentCharFormat(self.default_log_style)
 
     def open_settings(self, event):
         print("settings")
