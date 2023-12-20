@@ -241,7 +241,7 @@ class Interpreter:
                 count_endrepeat += 1
 
         if count_repeat != count_endrepeat:
-            return errors.RepeatNotClosedError(
+            raise errors.RepeatNotClosedError(
                                             "Your repeat cycle is not closed"
                                         )
         while index < len(self.executable_commands):
@@ -299,7 +299,7 @@ class Interpreter:
                                         index += 1
 
                                     except IndexError:
-                                        return errors.RepeatNotClosedError(
+                                        raise errors.RepeatNotClosedError(
                                             "Your repeat cycle is not closed"
                                         )
                                     this_comm = self.executable_commands[index]
@@ -323,7 +323,7 @@ class Interpreter:
                                     index += 1
 
                                 except IndexError:
-                                    return errors.RepeatNotClosedError(
+                                    raise errors.RepeatNotClosedError(
                                         "Your repeat cycle is not closed"
                                     )
 
@@ -343,7 +343,7 @@ class Interpreter:
                             index += 1
 
                         except IndexError:
-                            return errors.RepeatNotClosedError(
+                            raise errors.RepeatNotClosedError(
                                 "Your repeat cycle is not closed"
                             )
 
@@ -385,9 +385,11 @@ class Interpreter:
                 else:
                     value_to_move = int(command_split[1])
 
-                error = self.grid.move(command_split[0], value_to_move)
-                if error is not None:
-                    return error
+                try:
+                    self.grid.move(command_split[0], value_to_move)
+
+                except errors.Error:
+                    return
 
                 self.coordinates.append((self.grid.x, self.grid.y))
 
@@ -397,7 +399,7 @@ class Interpreter:
                     endif_index = self.final_executable_commands[i:].index("ENDIF") + i
 
                 except ValueError:
-                    return errors.IFBlockNotClosedError("IFBlock was never closed")
+                    raise errors.IFBlockNotClosedError("IFBlock was never closed")
 
                 match block_direction:
                     case "UP":
@@ -459,5 +461,5 @@ class Interpreter:
 
 if __name__ == "__main__":
     program = Interpreter()
-    res = program.execute("./programs/repeat_not_closed.txt")
+    res = program.execute("./programs/program.txt")
     print(res)
