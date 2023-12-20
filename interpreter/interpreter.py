@@ -1,7 +1,6 @@
 from collections import defaultdict
 
-import errors
-import grid
+from . import errors, grid
 
 
 class Interpreter:
@@ -56,7 +55,7 @@ class Interpreter:
 
             index += 1
 
-    def first_parse(self, commands_array) -> None:
+    def first_parse(self, commands_array) -> None | errors.Error:
         index = 0
         # Check if there is a not closed or not opened repeat cycle error
         count_repeat = 0
@@ -70,7 +69,7 @@ class Interpreter:
                 count_endrepeat += 1
 
         if count_repeat != count_endrepeat:
-            raise errors.RepeatNotClosedError(
+            return errors.RepeatNotClosedError(
                 "Your repeat cycle is not closed"
             )
 
@@ -119,10 +118,9 @@ class Interpreter:
                                         index += 1
 
                                     except IndexError:
-                                        raise (
-                                            errors.RepeatNotClosedError(
-                                                "Your repeat cycle is not closed"
-                                            ))
+                                        return errors.RepeatNotClosedError(
+                                            "Your repeat cycle is not closed"
+                                        )
 
                                 # escaping from "ENDREPEAT" in 3rd loop
                                 index += 1
@@ -142,7 +140,7 @@ class Interpreter:
                                     index += 1
 
                                 except IndexError:
-                                    raise errors.RepeatNotClosedError(
+                                    return errors.RepeatNotClosedError(
                                         "Your repeat cycle is not closed"
                                     )
 
@@ -162,7 +160,7 @@ class Interpreter:
                             index += 1
 
                         except IndexError:
-                            raise errors.RepeatNotClosedError(
+                            return errors.RepeatNotClosedError(
                                 "Your repeat cycle is not closed"
                             )
 
@@ -228,7 +226,7 @@ class Interpreter:
 
             index += 1
 
-    def second_parse(self) -> None:
+    def second_parse(self):
         index = 0
         # Check if there is a not closed or not opened repeat cycle error
         count_repeat = 0
@@ -361,13 +359,20 @@ class Interpreter:
 
             index += 1
 
-    def execute(self, program_file: str) -> (None | errors.Error |
-                                             list[tuple[int, int]]):
+    def execute(self, program_file: str) -> (
+            None | errors.Error | list[tuple[int, int]]
+    ):
         self.load_file(program_file)
         self.get_variables()
         self.get_procedures()
-        self.first_parse(self.commands)
-        self.second_parse()
+        first_parse_error = self.first_parse(self.commands)
+        second_parse_error = self.second_parse()
+
+        if first_parse_error is not None:
+            return first_parse_error
+
+        if second_parse_error is not None:
+            return second_parse_error
 
         i = 0
         while i < len(self.final_executable_commands):
@@ -376,7 +381,6 @@ class Interpreter:
             if command_split[0] in ["UP", "DOWN", "LEFT", "RIGHT"]:
                 if command_split[1] in self.variables.keys():
                     value_to_move = self.variables[command_split[1]]
-
                 else:
                     value_to_move = int(command_split[1])
 
@@ -387,10 +391,13 @@ class Interpreter:
             if command_split[0] == "IFBLOCK":
                 block_direction = command_split[1]
                 try:
-                    endif_index = self.final_executable_commands[i:].index("ENDIF") + i
+                    endif_index = (self.final_executable_commands[i:]
+                                   .index("ENDIF") + i)
 
                 except ValueError:
-                    raise errors.IFBlockNotClosedError("IFBlock was never closed")
+                    raise errors.IFBlockNotClosedError(
+                        "IFBlock was never closed"
+                    )
 
                 match block_direction:
                     case "UP":

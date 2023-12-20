@@ -1,6 +1,15 @@
+import logging
+
 from PyQt5.Qsci import QsciLexerCustom
 from PyQt5.QtGui import QColor
+import lark.exceptions
 from lark import Lark
+
+
+logging.basicConfig(
+    level=logging.WARNING,
+    format="%(asctime)s %(levelname)s %(message)s"
+)
 
 
 class Lexer(QsciLexerCustom):
@@ -129,5 +138,8 @@ class Lexer(QsciLexerCustom):
                         token_len, self.token_styles.get(token.type, 0))
 
                 last_pos = token.start_pos + token_len
-        except Exception:
-            pass
+        except Exception as ex:
+            if ex.__class__ != lark.exceptions.UnexpectedCharacters:
+                logging.error(ex)
+            else:
+                logging.debug(ex)

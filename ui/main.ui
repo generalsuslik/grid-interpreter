@@ -53,6 +53,48 @@ color: white;</string>
            <number>0</number>
           </property>
           <item>
+           <widget class="QPushButton" name="run_btn">
+            <property name="minimumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+	border-radius: 4px;
+	background: rgb(50, 50, 50);
+}
+
+QPushButton:hover {
+	border-radius: 4px;
+	background: rgb(60, 60, 60);
+}
+
+QPushButton:pressed  {
+	border-radius: 4px;
+	background: rgb(77, 77, 77);
+}</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset>
+              <normaloff>assets/run-icon.png</normaloff>assets/run-icon.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>32</width>
+              <height>32</height>
+             </size>
+            </property>
+            <property name="flat">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QPushButton" name="open_file_btn">
             <property name="minimumSize">
              <size>
@@ -64,19 +106,16 @@ color: white;</string>
              <string notr="true">QPushButton {
 	border-radius: 4px;
 	background: rgb(50, 50, 50);
-	aspect-ratio: 1;
 }
 
 QPushButton:hover {
 	border-radius: 4px;
 	background: rgb(60, 60, 60);
-	aspect-ratio: 1;
 }
 
 QPushButton:pressed  {
 	border-radius: 4px;
 	background: rgb(77, 77, 77);
-	aspect-ratio: 1;
 }</string>
             </property>
             <property name="text">
@@ -109,19 +148,16 @@ QPushButton:pressed  {
              <string notr="true">QPushButton {
 	border-radius: 4px;
 	background: rgb(50, 50, 50);
-	aspect-ratio: 1;
 }
 
 QPushButton:hover {
 	border-radius: 4px;
 	background: rgb(60, 60, 60);
-	aspect-ratio: 1;
 }
 
 QPushButton:pressed  {
 	border-radius: 4px;
 	background: rgb(77, 77, 77);
-	aspect-ratio: 1;
 }</string>
             </property>
             <property name="text">
@@ -154,19 +190,16 @@ QPushButton:pressed  {
              <string notr="true">QPushButton {
 	border-radius: 4px;
 	background: rgb(50, 50, 50);
-	aspect-ratio: 1;
 }
 
 QPushButton:hover {
 	border-radius: 4px;
 	background: rgb(60, 60, 60);
-	aspect-ratio: 1;
 }
 
 QPushButton:pressed  {
 	border-radius: 4px;
 	background: rgb(77, 77, 77);
-	aspect-ratio: 1;
 }</string>
             </property>
             <property name="text">
@@ -196,19 +229,16 @@ QPushButton:pressed  {
              <string notr="true">QPushButton {
 	border-radius: 4px;
 	background: rgb(50, 50, 50);
-	aspect-ratio: 1;
 }
 
 QPushButton:hover {
 	border-radius: 4px;
 	background: rgb(60, 60, 60);
-	aspect-ratio: 1;
 }
 
 QPushButton:pressed  {
 	border-radius: 4px;
 	background: rgb(77, 77, 77);
-	aspect-ratio: 1;
 }</string>
             </property>
             <property name="text">
@@ -246,7 +276,7 @@ QPushButton:pressed  {
             </property>
             <property name="font">
              <font>
-              <pointsize>18</pointsize>
+              <pointsize>20</pointsize>
               <weight>50</weight>
               <italic>false</italic>
               <bold>false</bold>

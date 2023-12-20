@@ -19,14 +19,17 @@ class OpenHelper:
 
 
 class Ui(QtWidgets.QMainWindow):
-    def __init__(self, db_manager):
+    def __init__(self, interpreter, db_manager):
         super(Ui, self).__init__()
         self.db = db_manager
+        self.interpreter = interpreter
         uic.loadUi("./ui/main.ui", self)
+
         self.open_file_btn.clicked.connect(self.open_file)
         self.new_file_btn.clicked.connect(self.create_file)
         self.save_file_btn.clicked.connect(self.save_file)
         self.settings_btn.clicked.connect(self.open_settings)
+        self.run_btn.clicked.connect(self.execute_code)
 
         self.code_field = Editor(self)
         self.code_layout.addWidget(self.code_field)
@@ -44,19 +47,16 @@ class Ui(QtWidgets.QMainWindow):
                 QPushButton {
                     border-radius: 4px;
                     background: rgb(50, 50, 50);
-                    aspect-ratio: 1;
                 }
 
                 QPushButton:hover {
                     border-radius: 4px;
                     background: rgb(60, 60, 60);
-                    aspect-ratio: 1;
                 }
 
                 QPushButton:pressed  {
                     border-radius: 4px;
                     background: rgb(77, 77, 77);
-                    aspect-ratio: 1;
                 }
             """)
             btn.setText(file[1].split("/")[-1])
@@ -92,6 +92,14 @@ class Ui(QtWidgets.QMainWindow):
             with open(self.filename, "w", encoding="utf-8") as f:
                 f.write(self.code_field.text())
                 self.db.update_recent(self.filename, time.time())
+
+    def execute_code(self, event):
+        self.save_file(None)
+        try:
+            run_result = self.interpreter.execute(self.filename)
+            print(run_result)
+        except Exception as ex:
+            print(ex)
 
     def open_settings(self, event):
         print("settings")

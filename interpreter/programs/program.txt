@@ -15,9 +15,3 @@ IFBLOCK LEFT
 ENDIF
 
 CALL GaySex
-
-
-
-
-
-
