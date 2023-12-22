@@ -1,4 +1,4 @@
-from . import errors
+from interpreter import errors
 
 
 class Grid:

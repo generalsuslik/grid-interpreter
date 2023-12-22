@@ -1,6 +1,6 @@
 from collections import defaultdict
 
-from . import errors, grid
+from interpreter import errors, grid
 
 
 class Interpreter:

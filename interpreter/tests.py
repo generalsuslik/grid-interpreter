@@ -1,11 +1,11 @@
 import unittest
 
-from interpreter import Interpreter
+from interpreter import interpreter as interpreter_file
 
 
 class TestInterpreter(unittest.TestCase):
     def test_interpreter1(self):
-        interpreter = Interpreter()
+        interpreter = interpreter_file.Interpreter()
         result = interpreter.execute("programs/program1.txt")
         self.assertEqual(result,
                          [(0, 0), (2, 0), (4, 0), (6, 0), (6, 2), (6, 4)])
@@ -21,13 +21,13 @@ class TestInterpreter(unittest.TestCase):
     #                      "You can't move down 2 times.")
 
     def test_3_nested_procedure_calls(self):
-        interpreter = Interpreter()
+        interpreter = interpreter_file.Interpreter()
         result = interpreter.execute("programs/3nested_proc.txt")
 
         self.assertEqual(result, [(0, 0), (0, 4), (3, 4), (3, 6)])
 
     def test_program2(self):
-        interpreter = Interpreter()
+        interpreter = interpreter_file.Interpreter()
         result = interpreter.execute("programs/program2.txt")
 
         self.assertEqual(result,
