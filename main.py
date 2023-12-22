@@ -3,7 +3,7 @@ import sys
 from PyQt5 import QtWidgets
 
 from core_tools.logger import setup_logger
-from interpreter.interpreter import Interpreter
+from interpreter.interpreter_file import Interpreter
 from ui.db_bridge import DBManager
 from ui.ui import Ui
 

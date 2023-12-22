@@ -459,5 +459,5 @@ class Interpreter:
 
 if __name__ == "__main__":
     program = Interpreter()
-    res = program.execute("./programs/program.txt")
+    res = program.execute("./programs/test_ui_with_proc.txt")
     print(res)

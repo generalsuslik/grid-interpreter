@@ -1,6 +1,6 @@
 import unittest
 
-from interpreter import interpreter as interpreter_file
+from interpreter import interpreter_file
 
 
 class TestInterpreter(unittest.TestCase):
