@@ -37,4 +37,3 @@ class RepeatNotClosedError(Error):
 class IFBlockNotClosedError(Error):
     def __init__(self, message: str) -> None:
         super().__init__(f"{self.__class__.__name__} --> {message}")
-
