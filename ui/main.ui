@@ -40,7 +40,7 @@ color: white;</string>
     <item row="0" column="1">
      <layout class="QVBoxLayout" name="verticalLayout" stretch="3,0">
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,2,5,2">
+       <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,4,10,5">
         <item>
          <layout class="QVBoxLayout" name="ui_buttons">
           <property name="spacing">
@@ -300,63 +300,7 @@ border-bottom: 1px solid grey;</string>
          <layout class="QVBoxLayout" name="code_layout"/>
         </item>
         <item>
-         <layout class="QVBoxLayout" name="preview_layout" stretch="2,1">
-          <item>
-           <widget class="QLabel" name="image">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="styleSheet">
-             <string notr="true"/>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="pixmap">
-             <pixmap>assets/empty_field.png</pixmap>
-            </property>
-            <property name="scaledContents">
-             <bool>true</bool>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-            <property name="wordWrap">
-             <bool>false</bool>
-            </property>
-            <property name="margin">
-             <number>0</number>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="cords">
-            <property name="font">
-             <font>
-              <pointsize>12</pointsize>
-              <weight>75</weight>
-              <bold>true</bold>
-             </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">padding: 2%;</string>
-            </property>
-            <property name="text">
-             <string>X: 12
-Y: 7</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignHCenter|Qt::AlignTop</set>
-            </property>
-           </widget>
-          </item>
-         </layout>
+         <layout class="QVBoxLayout" name="preview_layout" stretch=""/>
         </item>
        </layout>
       </item>

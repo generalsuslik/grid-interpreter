@@ -3,9 +3,10 @@ import time
 
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QColor
+from PyQt5.QtGui import QColor, QResizeEvent
 
 from .editor import Editor
+from .field import Field
 
 
 # crutch for normal button generation
@@ -35,11 +36,19 @@ class Ui(QtWidgets.QMainWindow):
         self.code_field = Editor(self)
         self.code_layout.addWidget(self.code_field)
         self.default_log_style = self.logs.currentCharFormat()
+        self.preview = Field(self, 21)
+        self.cords = QtWidgets.QLabel("X: 1\nY: 1")
+        self.cords.setStyleSheet("font-size: 12pt; font-weight: 700;")
+        self.cords.setAlignment(Qt.AlignCenter)
+        self.preview_layout.setAlignment(Qt.AlignCenter)
+        self.preview_layout.addWidget(self.preview)
+        self.preview_layout.addWidget(self.cords)
 
         self.filename = ""
         self.recent_layout.setAlignment(Qt.AlignTop)
         self.generate_recent()
         self.show()
+        self.preview.update()
         self.log("Ida started up")
         self.log("We're ready to go")
 
@@ -101,8 +110,11 @@ class Ui(QtWidgets.QMainWindow):
         self.save_file(None)
         try:
             run_result = self.interpreter.execute(self.filename)
+            result_x, result_y = run_result[-1][0], run_result[-1][1]
+            self.cords.setText(f"X: {result_x}\n Y: {result_y}")
             self.log(run_result)
         except Exception as ex:
+            self.cords.setText("X: ---\nY: ---")
             self.log(ex, level=logging.ERROR)
 
     def log(self, text, level=logging.INFO):
@@ -110,6 +122,9 @@ class Ui(QtWidgets.QMainWindow):
             level=level,
             msg=text
         )
+        log_cursor = self.logs.textCursor()  # Moving cursor to the end before
+        log_cursor.movePosition(11)          # writing new log line to avoid a
+        self.logs.setTextCursor(log_cursor)  # bug if user clicked on logfield
         match level:
             case logging.INFO:
                 style = self.default_log_style
@@ -134,3 +149,8 @@ class Ui(QtWidgets.QMainWindow):
 
     def open_settings(self, event):
         print("settings")
+        self.preview.update()
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        self.preview.update()
