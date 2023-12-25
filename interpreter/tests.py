@@ -4,6 +4,15 @@ from interpreter import interpreter_file
 
 
 class TestInterpreter(unittest.TestCase):
+
+    def test_same_program_multiple_executing(self):
+        interpreter = interpreter_file.Interpreter()
+        result1 = interpreter.execute("programs/program2.txt")
+        result2 = interpreter.execute("programs/program2.txt")
+        result3 = interpreter.execute("programs/program2.txt")
+
+        self.assertEqual(result1, result2, result3)
+
     def test_interpreter1(self):
         interpreter = interpreter_file.Interpreter()
         result = interpreter.execute("programs/program1.txt")
