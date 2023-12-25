@@ -12,7 +12,7 @@ class Interpreter:
     """
 
     def __init__(self):
-        self.grid = grid.Grid()
+        self.grid = None
         self.commands = []
         self.executable_commands = []
         self.final_executable_commands = []
@@ -362,6 +362,7 @@ class Interpreter:
     def execute(self, program_file: str) -> (
             None | errors.Error | list[tuple[int, int]]
     ):
+        self.grid = grid.Grid(start_x=0, start_y=0)
         self.load_file(program_file)
         self.get_variables()
         self.get_procedures()
@@ -442,7 +443,17 @@ class Interpreter:
 
             i += 1
 
-        return self.coordinates
+        self.grid = None
+        self.commands = []
+        self.executable_commands = []
+        self.final_executable_commands = []
+        self.functions = defaultdict(list)
+        self.variables = {}
+
+        result = self.coordinates
+        self.coordinates = [(0, 0)]
+
+        return result
 
     def load_file(self, program_file: str) -> None:
         with open(program_file, "a") as file:
@@ -459,5 +470,6 @@ class Interpreter:
 
 if __name__ == "__main__":
     program = Interpreter()
-    res = program.execute("./programs/test_ui_with_proc.txt")
-    print(res)
+    res = program.execute("./programs/1.txt")
+    new_res = program.execute("./programs/1.txt")
+    print(res, new_res)
