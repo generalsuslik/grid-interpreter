@@ -456,8 +456,10 @@ class Interpreter:
         return result
 
     def load_file(self, program_file: str) -> None:
-        with open(program_file, "a") as file:
-            file.write("\n")
+        check_file = open(program_file).readline()
+        if not check_file.endswith("\n"):
+            with open(program_file, "a") as file:
+                file.write("\n")
 
         with open(program_file, "r") as file:
             for line in file:
