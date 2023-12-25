@@ -45,6 +45,7 @@ class Ui(QtWidgets.QMainWindow):
         self.preview_layout.addWidget(self.cords)
 
         self.filename = ""
+        self.way = None
         self.recent_layout.setAlignment(Qt.AlignTop)
         self.generate_recent()
         self.show()
@@ -109,13 +110,15 @@ class Ui(QtWidgets.QMainWindow):
     def execute_code(self, event):
         self.save_file(None)
         try:
-            run_result = self.interpreter.execute(self.filename)
-            result_x, result_y = run_result[-1][0], run_result[-1][1]
+            self.way = self.interpreter.execute(self.filename)
+            result_x, result_y = self.way[-1][0], self.way[-1][1]
             self.cords.setText(f"X: {result_x}\n Y: {result_y}")
-            self.log(run_result)
+            self.log(self.way)
         except Exception as ex:
             self.cords.setText("X: ---\nY: ---")
+            self.way = None
             self.log(ex, level=logging.ERROR)
+        self.preview.update(self.way)
 
     def log(self, text, level=logging.INFO):
         self.logger.log(
@@ -149,8 +152,7 @@ class Ui(QtWidgets.QMainWindow):
 
     def open_settings(self, event):
         print("settings")
-        self.preview.update()
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
-        self.preview.update()
+        self.preview.update(self.way)
