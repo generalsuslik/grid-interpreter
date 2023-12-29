@@ -5,9 +5,11 @@ from interpreter import errors, grid
 
 class Interpreter:
     """
-    Class represents simple interpreter. First, u have to declare all
-    procedures with get_procedures method, then u have to run parse method,
-    to remove all loops and procedures calls. After that, you'll have an
+    Class represents simple interpreter. When u ran the execute() method,
+    the interpreter declares all variables and procedures with get_variables()
+    and get_procedures() methods respectively. Then interpreter runs 2
+    parse methods,
+    to open all loops and procedures calls. After that, it'll have an
     array of all static stuff and if-blocks.
     """
 
@@ -362,6 +364,14 @@ class Interpreter:
     def execute(self, program_file: str) -> (
             None | errors.Error | list[tuple[int, int]]
     ):
+        self.grid = None
+        self.commands = []
+        self.executable_commands = []
+        self.final_executable_commands = []
+        self.functions = defaultdict(list)
+        self.variables = {}
+        self.coordinates = [(0, 0)]
+
         self.grid = grid.Grid(start_x=0, start_y=0)
         self.load_file(program_file)
         self.get_variables()
@@ -443,17 +453,7 @@ class Interpreter:
 
             i += 1
 
-        self.grid = None
-        self.commands = []
-        self.executable_commands = []
-        self.final_executable_commands = []
-        self.functions = defaultdict(list)
-        self.variables = {}
-
-        result = self.coordinates
-        self.coordinates = [(0, 0)]
-
-        return result
+        return self.coordinates
 
     def load_file(self, program_file: str) -> None:
         check_file = open(program_file).readline()
@@ -472,6 +472,6 @@ class Interpreter:
 
 if __name__ == "__main__":
     program = Interpreter()
-    res = program.execute("./programs/1.txt")
-    new_res = program.execute("./programs/1.txt")
-    print(res, new_res)
+    res = program.execute("./programs/program.txt")
+    print(res)
+
