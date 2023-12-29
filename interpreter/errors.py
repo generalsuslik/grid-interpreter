@@ -37,3 +37,11 @@ class RepeatNotClosedError(Error):
 class IFBlockNotClosedError(Error):
     def __init__(self, message: str) -> None:
         super().__init__(f"{self.__class__.__name__} --> {message}")
+
+
+class ExecuteAtLeastOnce(Error):
+    def __init__(
+            self,
+            message="You must execute any program at least once"
+    ) -> None:
+        super().__init__(f"{self.__class__.__name__} --> {message}")

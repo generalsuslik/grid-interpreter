@@ -19,5 +19,5 @@ jobs:
           ignore: "F401"
           max-line-length: "79"
           path: "."
-          exclude: "./ui/assets/*,./interpreter/programs/*"
+          exclude: "./ui/assets/*,./interpreter/test_programs/*"
           plugins: "flake8-alphabetize"

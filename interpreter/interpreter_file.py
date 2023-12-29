@@ -364,7 +364,6 @@ class Interpreter:
     def execute(self, program_file: str) -> (
             None | errors.Error | list[tuple[int, int]]
     ):
-        self.grid = None
         self.commands = []
         self.executable_commands = []
         self.final_executable_commands = []
@@ -466,12 +465,16 @@ class Interpreter:
                 if len(line) > 2:
                     self.commands.append(line[:-1].strip())
 
+    def get_cords(self):
+        if self.grid:
+            return self.grid.get_coords()
+        raise errors.ExecuteAtLeastOnce()
+
     def __str__(self):
         return f"{self.coordinates}"
 
 
 if __name__ == "__main__":
     program = Interpreter()
-    res = program.execute("./programs/program.txt")
+    res = program.execute("./test_programs/program.txt")
     print(res)
-
