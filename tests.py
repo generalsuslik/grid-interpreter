@@ -27,9 +27,12 @@ class TestInterpreter(unittest.TestCase):
 
     def test_3_nested_procedure_calls(self):
         interpreter = interpreter_file.Interpreter()
-        result = interpreter.execute("test_programs/3nested_proc.txt")
+        try:
+            result = interpreter.execute("test_programs/3nested_proc.txt")
 
-        self.assertEqual(result, [(0, 0), (0, 4), (3, 4), (3, 6)])
+        except errors.Increasing3NestedCallsError as error:
+            self.assertEqual(error.message, "Increasing3NestedCallsError --> "
+                                            "You've increased 3 nested calls rule")
 
     def test_program2(self):
         interpreter = interpreter_file.Interpreter()

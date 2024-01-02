@@ -1,5 +1,5 @@
-from string import ascii_letters
 from collections import defaultdict
+from string import ascii_letters
 
 from interpreter import errors, grid
 
