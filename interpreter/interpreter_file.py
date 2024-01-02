@@ -1,3 +1,4 @@
+from string import ascii_letters
 from collections import defaultdict
 
 from interpreter import errors, grid
@@ -30,7 +31,21 @@ class Interpreter:
             command_split = command.split()
             if command_split[0] == "SET":
                 variable_name = command_split[1]
-                variable_value = int(command.split("=")[-1])
+                variable_value = command.split("=")[-1].strip()
+
+                if variable_value in ascii_letters:
+
+                    if self.variables.get(variable_value) is None:
+                        raise errors.NotDeclaredVariableError(
+                            f"No such variable: {variable_value}"
+                        )
+
+                    else:
+                        variable_value = self.variables.get(variable_value)
+
+                else:
+                    variable_value = int(variable_value)
+
                 self.variables[variable_name] = variable_value
 
                 self.commands.pop(index)
@@ -71,7 +86,7 @@ class Interpreter:
                 count_endrepeat += 1
 
         if count_repeat != count_endrepeat:
-            return errors.RepeatNotClosedError(
+            raise errors.RepeatNotClosedError(
                 "Your repeat cycle is not closed"
             )
 
@@ -82,11 +97,24 @@ class Interpreter:
             # 1st loop
             if split_command[0] == "REPEAT":
                 n1 = split_command[1]
-                if n1 in self.variables.keys():
-                    n1 = self.variables[n1]
+                if n1 in ascii_letters:
+                    check_n1 = self.variables.get(n1)
+                    if check_n1 is None:
+                        raise errors.NotDeclaredVariableError(
+                            f"No such variable: {n1}"
+                        )
+
+                    else:
+                        n1 = check_n1
 
                 else:
                     n1 = int(n1)
+
+                if n1 == 0:
+                    raise errors.EndlessRepeatError(
+                        "You've created an endless repeat"
+                    )
+
                 cycle_body1 = []
                 index += 1
                 while commands_array[index] != "ENDREPEAT":
@@ -96,11 +124,24 @@ class Interpreter:
                     # 2 nest loop
                     if split_command1[0] == "REPEAT":
                         n2 = split_command1[1]
-                        if n2 in self.variables.keys():
-                            n2 = self.variables[n2]
+                        if n2 in ascii_letters:
+                            check_n2 = self.variables.get(n2)
+                            if check_n2 is None:
+                                raise errors.NotDeclaredVariableError(
+                                    f"No such variable: {n2}"
+                                )
+
+                            else:
+                                n2 = check_n2
 
                         else:
                             n2 = int(n2)
+
+                        if n2 == 0:
+                            raise errors.EndlessRepeatError(
+                                "You've created an endless repeat"
+                            )
+
                         cycle_body2 = []
                         index += 1
                         # while we haven't quited 2 loop
@@ -111,16 +152,42 @@ class Interpreter:
                             # last 3rd nested loop
                             if split_command2[0] == "REPEAT":
                                 # we've found 3rd (last) loop
-                                n3 = int(split_command2[1])
+                                n3 = split_command1[1]
+                                if n3 in ascii_letters:
+                                    check_n3 = self.variables.get(n3)
+                                    if check_n3 is None:
+                                        raise errors.NotDeclaredVariableError(
+                                            f"No such variable: {n3}"
+                                        )
+
+                                    n3 = check_n3
+
+                                else:
+                                    n3 = int(n3)
+
+                                if n3 == 0:
+                                    raise errors.EndlessRepeatError(
+                                        "You've created an endless repeat"
+                                    )
                                 cycle_body3 = []
                                 index += 1
                                 while commands_array[index] != "ENDREPEAT":
+                                    if (commands_array[index].split()[0]
+                                            == "REPEAT" or
+                                            commands_array[index].split()[0]
+                                            == "CALL"):
+                                        raise (errors.
+                                        Increasing3NestedCallsError(
+                                            "You've increased 3 nested calls "
+                                            "rule"
+                                        ))
+
                                     cycle_body3.append(commands_array[index])
                                     try:
                                         index += 1
 
                                     except IndexError:
-                                        return errors.RepeatNotClosedError(
+                                        raise errors.RepeatNotClosedError(
                                             "Your repeat cycle is not closed"
                                         )
 
@@ -142,7 +209,7 @@ class Interpreter:
                                     index += 1
 
                                 except IndexError:
-                                    return errors.RepeatNotClosedError(
+                                    raise errors.RepeatNotClosedError(
                                         "Your repeat cycle is not closed"
                                     )
 
@@ -201,6 +268,14 @@ class Interpreter:
                                 procedure_name3 = elem_split2[1]
                                 call_cycle3 = []
                                 for elem3 in self.functions[procedure_name3]:
+                                    if elem3.split()[0] == "CALL" or \
+                                            elem3.split()[0] == "REPEAT":
+                                        raise (errors.
+                                        Increasing3NestedCallsError(
+                                            "You've increased 3 nested calls "
+                                            "rule"
+                                        ))
+
                                     call_cycle3.append(elem3)
 
                                 for called3 in call_cycle3:
@@ -252,11 +327,22 @@ class Interpreter:
             # 1st loop
             if split_command[0] == "REPEAT":
                 n1 = split_command[1]
-                if n1 in self.variables.keys():
-                    n1 = self.variables[n1]
+                if n1 in ascii_letters:
+                    check_n1 = self.variables.get(n1)
+                    if check_n1 is None:
+                        raise errors.NotDeclaredVariableError(
+                            f"No such variable: {n1}"
+                        )
+
+                    n1 = check_n1
 
                 else:
                     n1 = int(n1)
+
+                if n1 == 0:
+                    raise errors.EndlessRepeatError(
+                        "You've created an endless repeat"
+                    )
 
                 cycle_body1 = []
                 index += 1
@@ -267,11 +353,23 @@ class Interpreter:
                     # 2 nest loop
                     if split_command1[0] == "REPEAT":
                         n2 = split_command1[1]
-                        if n2 in self.variables.keys():
-                            n2 = self.variables[n2]
+                        if n2 in ascii_letters:
+                            check_n2 = self.variables.get(n2)
+                            if check_n2 is None:
+                                raise errors.NotDeclaredVariableError(
+                                    f"No such variable: {n2}"
+                                )
+
+                            else:
+                                n2 = check_n2
 
                         else:
                             n2 = int(n2)
+
+                        if n2 == 0:
+                            raise errors.EndlessRepeatError(
+                                "You've created an endless repeat"
+                            )
 
                         cycle_body2 = []
                         index += 1
@@ -284,15 +382,41 @@ class Interpreter:
                             if split_command2[0] == "REPEAT":
                                 # we've found 3rd (last) loop
                                 n3 = split_command2[1]
-                                if n3 in self.variables.keys():
-                                    n3 = self.variables[n3]
+                                if n3 in ascii_letters:
+                                    check_n3 = self.variables.get(n3)
+                                    if check_n3 is None:
+                                        raise errors.NotDeclaredVariableError(
+                                            f"No such variable: {n3}"
+                                        )
+
+                                    else:
+                                        n3 = check_n3
 
                                 else:
                                     n3 = int(n3)
+
+                                if n3 == 0:
+                                    raise errors.EndlessRepeatError(
+                                        "You've created an endless repeat"
+                                    )
+
                                 cycle_body3 = []
                                 index += 1
                                 this_comm = self.executable_commands[index]
                                 while this_comm != "ENDREPEAT":
+
+                                    if (self.executable_commands[index].
+                                            split()[0]
+                                            == "REPEAT" or
+                                            self.executable_commands[index].
+                                                    split()[0]
+                                            == "CALL"):
+                                        raise (errors.
+                                        Increasing3NestedCallsError(
+                                            "You've increased 3 nested calls "
+                                            "rule"
+                                        ))
+
                                     cycle_body3.append(
                                         self.executable_commands[index]
                                     )
@@ -476,5 +600,5 @@ class Interpreter:
 
 if __name__ == "__main__":
     program = Interpreter()
-    res = program.execute("./test_programs/program.txt")
+    res = program.execute("../test_programs/1.txt")
     print(res)

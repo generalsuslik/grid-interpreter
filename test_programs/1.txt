@@ -1,1 +1,7 @@
-UP 2
+SET Z = 0
+SET Y = Z
+SET X = Y
+
+REPEAT x
+
+ENDREPEAT

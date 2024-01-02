@@ -45,3 +45,31 @@ class ExecuteAtLeastOnce(Error):
             message="You must execute any program at least once"
     ) -> None:
         super().__init__(f"{self.__class__.__name__} --> {message}")
+
+
+class NotDeclaredVariableError(Error):
+    def __init__(self, message: str) -> None:
+        super().__init__(f"{self.__class__.__name__} --> {message}")
+
+
+class EndlessRepeatError(Error):
+    def __init__(self, message: str) -> None:
+        super().__init__(f"{self.__class__.__name__} --> {message}")
+
+
+class CallUndeclaredProcedureError(Error):
+    def __init__(self, message: str) -> None:
+        super().__init__(f"{self.__class__.__name__} --> {message}")
+
+
+class ProcedureAlreadyDeclaredError(Error):
+    def __init__(self, message: str) -> None:
+        super().__init__(f"{self.__class__.__name__} --> {message}")
+
+
+class Increasing3NestedCallsError(Error):
+    def __init__(self, message: str) -> None:
+        super().__init__(f"{self.__class__.__name__} --> {message}")
+
+
+
