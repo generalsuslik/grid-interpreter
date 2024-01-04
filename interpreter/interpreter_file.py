@@ -316,9 +316,11 @@ class Interpreter:
                             if elem_split2[0] == "CALL":
                                 procedure_name3 = elem_split2[1]
 
-                                if procedure_name3 not in self.functions.keys():
+                                if (procedure_name3 not in
+                                        self.functions.keys()):
                                     raise errors.ProcedureNotDeclaredError(
-                                        f"No procedure with name {procedure_name3}"
+                                        f"No procedure with name "
+                                        f"{procedure_name3}"
                                     )
 
                                 call_cycle3 = []
