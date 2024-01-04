@@ -9,32 +9,32 @@ class Error(Exception):
         return self.message
 
 
-class GridOutOfBounceError(Error):
+class GridOutOfBounceError(Error):               # done
     def __init__(self, message: str) -> None:
         super().__init__(f"{self.__class__.__name__} --> {message}")
 
 
-class VariableNotDeclared(Error):
+class VariableNotDeclared(Error):                  # done
     def __init__(self, message: str) -> None:
         super().__init__(f"{self.__class__.__name__} --> {message}")
 
 
-class ProcedureNotDeclaredError(Error):
+class ProcedureNotDeclaredError(Error):                # done
     def __init__(self, message: str) -> None:
         super().__init__(f"{self.__class__.__name__} --> {message}")
 
 
-class ProcedureNotClosedError(Error):
+class ProcedureNotClosedError(Error):                # done
     def __init__(self, message: str) -> None:
         super().__init__(f"{self.__class__.__name__} --> {message}")
 
 
-class RepeatNotClosedError(Error):
+class RepeatNotClosedError(Error):                   # done
     def __init__(self, message: str) -> None:
         super().__init__(f"{self.__class__.__name__} --> {message}")
 
 
-class IFBlockNotClosedError(Error):
+class IFBlockNotClosedError(Error):                  # done
     def __init__(self, message: str) -> None:
         super().__init__(f"{self.__class__.__name__} --> {message}")
 
@@ -47,27 +47,27 @@ class ExecuteAtLeastOnce(Error):
         super().__init__(f"{self.__class__.__name__} --> {message}")
 
 
-class NotDeclaredVariableError(Error):
+class NotDeclaredVariableError(Error):                # done
     def __init__(self, message: str) -> None:
         super().__init__(f"{self.__class__.__name__} --> {message}")
 
 
-class EndlessRepeatError(Error):
+class EndlessRepeatError(Error):                       # done
     def __init__(self, message: str) -> None:
         super().__init__(f"{self.__class__.__name__} --> {message}")
 
 
-class CallUndeclaredProcedureError(Error):
+class ProcedureAlreadyDeclaredError(Error):              # done
     def __init__(self, message: str) -> None:
         super().__init__(f"{self.__class__.__name__} --> {message}")
 
 
-class ProcedureAlreadyDeclaredError(Error):
+class Increasing3NestedCallsError(Error):                 # done
     def __init__(self, message: str) -> None:
         super().__init__(f"{self.__class__.__name__} --> {message}")
 
 
-class Increasing3NestedCallsError(Error):
+class IncorrectRepeatDeclarationError(Error):             # done
     def __init__(self, message: str) -> None:
         super().__init__(f"{self.__class__.__name__} --> {message}")
 

@@ -60,11 +60,23 @@ class Interpreter:
             command_split = self.commands[index].split()
             if command_split[0] == "PROCEDURE":
                 procedure_name = command_split[1]
+                if procedure_name in self.functions.keys():
+                    raise errors.ProcedureAlreadyDeclaredError(
+                        f"Procedure with name {procedure_name} is already "
+                        f"declared"
+                    )
                 procedure_body = []
                 index += 1
-                while self.commands[index] != "ENDPROC":
-                    procedure_body.append(self.commands[index])
-                    index += 1
+
+                try:
+                    while self.commands[index] != "ENDPROC":
+                        procedure_body.append(self.commands[index])
+                        index += 1
+
+                except IndexError:
+                    raise errors.ProcedureNotClosedError(
+                        f"Procedure {procedure_name} was never closed"
+                    )
 
                 self.functions[procedure_name] = procedure_body
                 index += 1
@@ -112,7 +124,15 @@ class Interpreter:
 
                 if n1 == 0:
                     raise errors.EndlessRepeatError(
-                        "You've created an endless repeat"
+                        "You can't create an endless repeat"
+                        "Change your repeat times number to a "
+                        "number more then 0"
+                    )
+
+                if n1 < 0:
+                    raise errors.IncorrectRepeatDeclarationError(
+                        "You can't create a repeat cycle with "
+                        "with negative repeat times number"
                     )
 
                 cycle_body1 = []
@@ -139,7 +159,15 @@ class Interpreter:
 
                         if n2 == 0:
                             raise errors.EndlessRepeatError(
-                                "You've created an endless repeat"
+                                "You can't create an endless repeat"
+                                "Change your repeat times number to a "
+                                "number more then 0"
+                            )
+
+                        if n2 < 0:
+                            raise errors.IncorrectRepeatDeclarationError(
+                                "You can't create a repeat cycle with "
+                                "with negative repeat times number"
                             )
 
                         cycle_body2 = []
@@ -167,8 +195,17 @@ class Interpreter:
 
                                 if n3 == 0:
                                     raise errors.EndlessRepeatError(
-                                        "You've created an endless repeat"
+                                        "You can't create an endless repeat"
+                                        "Change your repeat times number to a "
+                                        "number more then 0"
                                     )
+
+                                if n3 < 0:
+                                    raise errors.IncorrectRepeatDeclarationError(
+                                        "You can't create a repeat cycle with "
+                                        "with negative repeat times number"
+                                    )
+
                                 cycle_body3 = []
                                 index += 1
                                 while commands_array[index] != "ENDREPEAT":
@@ -254,18 +291,36 @@ class Interpreter:
             # Working with procedures calling
             elif split_command[0] == "CALL":
                 procedure_name1 = split_command[1]
+
+                if procedure_name1 not in self.functions.keys():
+                    raise errors.ProcedureNotDeclaredError(
+                        f"No procedure with name {procedure_name1}"
+                    )
+
                 call_cycle1 = []
                 for elem1 in self.functions[procedure_name1]:
                     elem_split1 = elem1.split()
                     # Case we found 2nd func call
                     if elem_split1[0] == "CALL":
                         procedure_name2 = elem_split1[1]
+
+                        if procedure_name2 not in self.functions.keys():
+                            raise errors.ProcedureNotDeclaredError(
+                                f"No procedure with name {procedure_name2}"
+                            )
+
                         call_cycle2 = []
                         for elem2 in self.functions[procedure_name2]:
                             elem_split2 = elem2.split()
                             # Case we found 3rd procedure call
                             if elem_split2[0] == "CALL":
                                 procedure_name3 = elem_split2[1]
+
+                                if procedure_name3 not in self.functions.keys():
+                                    raise errors.ProcedureNotDeclaredError(
+                                        f"No procedure with name {procedure_name3}"
+                                    )
+
                                 call_cycle3 = []
                                 for elem3 in self.functions[procedure_name3]:
                                     if elem3.split()[0] == "CALL" or \
@@ -341,7 +396,16 @@ class Interpreter:
 
                 if n1 == 0:
                     raise errors.EndlessRepeatError(
-                        "You've created an endless repeat"
+                        "You can't create an endless repeat"
+                        "Change your repeat times number to a "
+                        "number more then 0"
+                    )
+
+                if n1 < 0:
+                    raise errors.EndlessRepeatError(
+                        "You can't create an endless repeat"
+                        "Change your repeat times number to a "
+                        "number more then 0"
                     )
 
                 cycle_body1 = []
@@ -368,7 +432,16 @@ class Interpreter:
 
                         if n2 == 0:
                             raise errors.EndlessRepeatError(
-                                "You've created an endless repeat"
+                                "You can't create an endless repeat"
+                                "Change your repeat times number to a "
+                                "number more then 0"
+                            )
+
+                        if n2 < 0:
+                            raise errors.EndlessRepeatError(
+                                "You can't create an endless repeat"
+                                "Change your repeat times number to a "
+                                "number more then 0"
                             )
 
                         cycle_body2 = []
@@ -397,7 +470,16 @@ class Interpreter:
 
                                 if n3 == 0:
                                     raise errors.EndlessRepeatError(
-                                        "You've created an endless repeat"
+                                        "You can't create an endless repeat"
+                                        "Change your repeat times number to a "
+                                        "number more then 0"
+                                    )
+
+                                if n3 < 0:
+                                    raise errors.EndlessRepeatError(
+                                        "You can't create an endless repeat"
+                                        "Change your repeat times number to a "
+                                        "number more then 0"
                                     )
 
                                 cycle_body3 = []
@@ -469,7 +551,7 @@ class Interpreter:
 
                         except IndexError:
                             raise errors.RepeatNotClosedError(
-                                "Your repeat cycle is not closed"
+                                "Your repeat cycle was never closed"
                             )
 
                 index += 1  # escaping from "ENDREPEAT" in 1st loop
@@ -499,14 +581,8 @@ class Interpreter:
         self.load_file(program_file)
         self.get_variables()
         self.get_procedures()
-        first_parse_error = self.first_parse(self.commands)
-        second_parse_error = self.second_parse()
-
-        if first_parse_error is not None:
-            return first_parse_error
-
-        if second_parse_error is not None:
-            return second_parse_error
+        self.first_parse(self.commands)
+        self.second_parse()
 
         i = 0
         while i < len(self.final_executable_commands):
@@ -579,10 +655,11 @@ class Interpreter:
         return self.coordinates
 
     def load_file(self, program_file: str) -> None:
-        check_file = open(program_file).readline()
-        if not check_file.endswith("\n"):
-            with open(program_file, "a") as file:
-                file.write("\n")
+        with open(program_file, "r") as check_file:
+            lines = check_file.read()
+            if not lines[-1].endswith("\n"):
+                with open(program_file, "a") as file:
+                    file.write("\n")
 
         with open(program_file, "r") as file:
             for line in file:
