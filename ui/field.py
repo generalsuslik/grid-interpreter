@@ -33,10 +33,10 @@ class Field(QLabel):
         if self.way:
             painter.setPen(QPen(QColor(111, 180, 111), 3))
             for i in range(len(self.way) - 1):
-                x_start = int(self.way[i][0] * step + step / 2)
-                y_start = int(self.way[i][1] * step + step / 2)
-                x_end = int(self.way[i + 1][0] * step + step / 2)
-                y_end = int(self.way[i + 1][1] * step + step / 2)
+                x_start = int(self.way[i][0] * step)
+                y_start = int(self.way[i][1] * step)
+                x_end = int(self.way[i + 1][0] * step)
+                y_end = int(self.way[i + 1][1] * step)
                 painter.drawLine(x_start, y_start, x_end, y_end)
         painter.end()
         self.setPixmap(canvas)
