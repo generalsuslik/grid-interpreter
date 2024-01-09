@@ -67,9 +67,6 @@ class Increasing3NestedCallsError(Error):                 # done
         super().__init__(f"{self.__class__.__name__} --> {message}")
 
 
-class IncorrectRepeatDeclarationError(Error):             # done
+class NegativeRepetitionsError(Error):             # done
     def __init__(self, message: str) -> None:
         super().__init__(f"{self.__class__.__name__} --> {message}")
-
-
-

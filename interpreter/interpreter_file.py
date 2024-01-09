@@ -130,7 +130,7 @@ class Interpreter:
                     )
 
                 if n1 < 0:
-                    raise errors.IncorrectRepeatDeclarationError(
+                    raise errors.NegativeRepetitionsError(
                         "You can't create a repeat cycle with "
                         "with negative repeat times number"
                     )
@@ -165,7 +165,7 @@ class Interpreter:
                             )
 
                         if n2 < 0:
-                            raise errors.IncorrectRepeatDeclarationError(
+                            raise errors.NegativeRepetitionsError(
                                 "You can't create a repeat cycle with "
                                 "with negative repeat times number"
                             )
@@ -201,7 +201,7 @@ class Interpreter:
                                     )
 
                                 if n3 < 0:
-                                    raise errors.IncorrectRepeatDeclarationError(
+                                    raise errors.NegativeRepetitionsError(
                                         "You can't create a repeat cycle with "
                                         "with negative repeat times number"
                                     )
@@ -209,15 +209,16 @@ class Interpreter:
                                 cycle_body3 = []
                                 index += 1
                                 while commands_array[index] != "ENDREPEAT":
-                                    if (commands_array[index].split()[0]
-                                            == "REPEAT" or
-                                            commands_array[index].split()[0]
-                                            == "CALL"):
-                                        raise (errors.
-                                        Increasing3NestedCallsError(
-                                            "You've increased 3 nested calls "
-                                            "rule"
-                                        ))
+                                    if (
+                                            self.executable_commands[index]
+                                            .split()[0] in ["REPEAT", "CALL"]
+                                    ):
+                                        raise (
+                                            errors.Increasing3NestedCallsError(
+                                                "You've increased 3 nested "
+                                                "calls rule"
+                                            )
+                                        )
 
                                     cycle_body3.append(commands_array[index])
                                     try:
@@ -325,13 +326,13 @@ class Interpreter:
 
                                 call_cycle3 = []
                                 for elem3 in self.functions[procedure_name3]:
-                                    if elem3.split()[0] == "CALL" or \
-                                            elem3.split()[0] == "REPEAT":
-                                        raise (errors.
-                                        Increasing3NestedCallsError(
-                                            "You've increased 3 nested calls "
-                                            "rule"
-                                        ))
+                                    if elem3.split()[0] in ["CALL", "REPEAT"]:
+                                        raise (
+                                            errors.Increasing3NestedCallsError(
+                                                "You've increased 3 nested "
+                                                "calls rule"
+                                            )
+                                        )
 
                                     call_cycle3.append(elem3)
 
@@ -488,18 +489,17 @@ class Interpreter:
                                 index += 1
                                 this_comm = self.executable_commands[index]
                                 while this_comm != "ENDREPEAT":
-
-                                    if (self.executable_commands[index].
-                                            split()[0]
-                                            == "REPEAT" or
-                                            self.executable_commands[index].
-                                                    split()[0]
-                                            == "CALL"):
-                                        raise (errors.
-                                        Increasing3NestedCallsError(
-                                            "You've increased 3 nested calls "
-                                            "rule"
-                                        ))
+                                    if (
+                                            self.executable_commands[index]
+                                            .split()[0] in ["REPEAT", "CALL"]
+                                    ):
+                                        raise (
+                                            errors.
+                                            Increasing3NestedCallsError(
+                                                "You've increased 3 nested "
+                                                "calls rule"
+                                            )
+                                        )
 
                                     cycle_body3.append(
                                         self.executable_commands[index]

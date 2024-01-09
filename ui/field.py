@@ -37,6 +37,8 @@ class Field(QLabel):
                 y_start = int(self.way[i][1] * step)
                 x_end = int(self.way[i + 1][0] * step)
                 y_end = int(self.way[i + 1][1] * step)
+                y_start = self.size - y_start
+                y_end = self.size - y_end
                 painter.drawLine(x_start, y_start, x_end, y_end)
         painter.end()
         self.setPixmap(canvas)
