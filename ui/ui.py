@@ -3,10 +3,11 @@ import time
 
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QColor, QResizeEvent
+from PyQt5.QtGui import QColor
 
 from .editor import Editor
 from .field import Field
+from .settings import Settings
 
 
 # crutch for normal button generation
@@ -26,13 +27,11 @@ class Ui(QtWidgets.QMainWindow):
         self.logger = logger
         self.interpreter = interpreter
         uic.loadUi("./ui/main.ui", self)
-
         self.open_file_btn.clicked.connect(self.open_file)
         self.new_file_btn.clicked.connect(self.create_file)
         self.save_file_btn.clicked.connect(self.save_file)
         self.settings_btn.clicked.connect(self.open_settings)
         self.run_btn.clicked.connect(self.execute_code)
-
         self.code_field = Editor(self)
         self.code_layout.addWidget(self.code_field)
         self.default_log_style = self.logs.currentCharFormat()
@@ -92,6 +91,12 @@ class Ui(QtWidgets.QMainWindow):
                 code = f.read()
             self.code_field.setText(code)
             self.db.update_recent(self.filename, time.time())
+            for i in range(self.recent_layout.count() - 1, 0, -1):
+                self.recent_layout.itemAt(i).widget().deleteLater()
+            self.generate_recent()
+            self.code_field.lexer.styleText(0, len(code))
+        else:
+            self.log("You didn't selected file")
 
     def create_file(self, event):
         self.filename = ""
@@ -151,7 +156,8 @@ class Ui(QtWidgets.QMainWindow):
             self.logs.setCurrentCharFormat(self.default_log_style)
 
     def open_settings(self, event):
-        print("settings")
+        self.settings_dialog = Settings()
+        self.settings_dialog.show()
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
