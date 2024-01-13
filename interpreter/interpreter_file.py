@@ -22,6 +22,9 @@ class Interpreter:
         self.functions = defaultdict(list)
         self.variables = {}
         self.coordinates = [(0, 0)]
+        self.allowed_commands = ["RIGHT", "LEFT", "UP", "DOWN", "REPEAT",
+                                 "ENDREPEAT", "IFBLOCK", "ENDIF",
+                                 "PROCEDURE", "ENDPROC", "SET"]
 
     # Variables declaration
     def get_variables(self):
@@ -33,20 +36,23 @@ class Interpreter:
                 variable_name = command_split[1]
                 variable_value = command.split("=")[-1].strip()
 
-                if variable_value in ascii_letters:
+                try:
 
-                    if self.variables.get(variable_value) is None:
-                        raise errors.NotDeclaredVariableError(
-                            f"No such variable: {variable_value}"
-                        )
-
-                    else:
-                        variable_value = self.variables.get(variable_value)
-
-                else:
                     variable_value = int(variable_value)
+                    self.variables[variable_name] = variable_value
 
-                self.variables[variable_name] = variable_value
+                except ValueError:
+                    if isinstance(variable_value, str):
+
+                        if self.variables.get(variable_value) is None:
+                            raise errors.NotDeclaredVariableError(
+                                f"No such variable: {variable_value}"
+                            )
+
+                        else:
+                            variable_value = self.variables.get(variable_value)
+
+                        self.variables[variable_name] = variable_value
 
                 self.commands.pop(index)
                 continue
@@ -84,6 +90,58 @@ class Interpreter:
 
             index += 1
 
+    def similar_command(self, command: str) -> str | None:
+        for allowed_command in self.allowed_commands:
+            if command in allowed_command and command != allowed_command:
+                return allowed_command
+
+        return None
+
+    def check_line(self, line: str) -> bool:
+        for command in self.allowed_commands:
+            if line in command and line != command:
+                return True
+
+        return False
+
+    def check_command(self, command):
+        command_split = command.split()
+        command_title = command_split[0]
+
+        match command_title:
+            case "RIGHT" | "LEFT" | "UP" | "DOWN" | "REPEAT" | "PROCEDURE" | "IFBLOCK" | "CALL":
+                return len(command_split) == 2
+
+            case "ENDPROC" | "PROCEDURE" | "ENDIF" | "ENDREPEAT":
+                return len(command_split) == 1
+
+            case "SET":
+                return len(command_split) == 4
+
+        if self.check_line(command_title):
+            possible_command = self.similar_command(command_title)
+            if possible_command is not None:
+                raise errors.NoSuchCommandError(f"No such command: "
+                                                f"{command_title}. "
+                                                f"Maybe you ment "
+                                                f"{possible_command}")
+
+        else:
+            raise errors.NoSuchCommandError(f"No such command: "
+                                            f"{command_title}")
+
+    def check_commands(self):
+        for command_line in self.commands:
+            self.check_command(command_line)
+
+    @staticmethod
+    def check_repeat_loop_declaration(split_command):
+        if len(split_command) != 2:
+            raise errors.IncorrectRepeatDeclarationError(
+                "Your loop is declared incorrectly. "
+                "It must be like: REPEAT <X>"
+            )
+
     def first_parse(self, commands_array) -> None | errors.Error:
         index = 0
         # Check if there is a not closed or not opened repeat cycle error
@@ -97,7 +155,7 @@ class Interpreter:
             if string.startswith("ENDREPEAT"):
                 count_endrepeat += 1
 
-        if count_repeat != count_endrepeat:
+        if count_repeat > count_endrepeat:
             raise errors.RepeatNotClosedError(
                 "Your repeat cycle is not closed"
             )
@@ -108,168 +166,203 @@ class Interpreter:
             # ########################LOOPS##############################
             # 1st loop
             if split_command[0] == "REPEAT":
+                self.check_repeat_loop_declaration(split_command)
                 n1 = split_command[1]
-                if n1 in ascii_letters:
-                    check_n1 = self.variables.get(n1)
+
+                check_n1 = None
+
+                try:
+                    check_n1 = int(n1)
+
+                except ValueError:
+                    if isinstance(n1, str):
+                        check_n1 = self.variables.get(n1)
+                        if check_n1 is None:
+                            raise errors.NotDeclaredVariableError(
+                                f"No such variable: {n1}"
+                            )
+
+                finally:
                     if check_n1 is None:
-                        raise errors.NotDeclaredVariableError(
-                            f"No such variable: {n1}"
+                        raise errors.SomethingWentWrongError(
+                            "Something went wrong"
                         )
 
-                    else:
-                        n1 = check_n1
-
-                else:
-                    n1 = int(n1)
+                    n1 = check_n1
 
                 if n1 == 0:
                     raise errors.EndlessRepeatError(
-                        "You can't create an endless repeat"
+                        "You can't create an endless repeat. "
                         "Change your repeat times number to a "
                         "number more then 0"
                     )
 
                 if n1 < 0:
-                    raise errors.NegativeRepetitionsError(
+                    raise errors.IncorrectRepeatDeclarationError(
                         "You can't create a repeat cycle with "
                         "with negative repeat times number"
                     )
 
                 cycle_body1 = []
                 index += 1
-                while commands_array[index] != "ENDREPEAT":
-                    command1 = commands_array[index]
-                    split_command1 = command1.split()
-                    ################################################
-                    # 2 nest loop
-                    if split_command1[0] == "REPEAT":
-                        n2 = split_command1[1]
-                        if n2 in ascii_letters:
-                            check_n2 = self.variables.get(n2)
-                            if check_n2 is None:
-                                raise errors.NotDeclaredVariableError(
-                                    f"No such variable: {n2}"
-                                )
+                try:
+                    while commands_array[index] != "ENDREPEAT":
+                        command1 = commands_array[index]
+                        split_command1 = command1.split()
+                        ################################################
+                        # 2 nest loop
+                        if split_command1[0] == "REPEAT":
+                            self.check_repeat_loop_declaration(split_command)
+                            n2 = split_command1[1]
 
-                            else:
+                            check_n2 = None
+
+                            try:
+                                check_n2 = int(n2)
+
+                            except ValueError:
+                                if isinstance(n2, str):
+                                    check_n2 = self.variables.get(n2)
+                                    if check_n2 is None:
+                                        raise errors.NotDeclaredVariableError(
+                                            f"No such variable: {n2}"
+                                        )
+
+                            finally:
+                                if check_n2 is None:
+                                    raise errors.SomethingWentWrongError(
+                                        "Something went wrong"
+                                    )
+
                                 n2 = check_n2
 
-                        else:
-                            n2 = int(n2)
+                            if n2 == 0:
+                                raise errors.EndlessRepeatError(
+                                    "You can't create an endless repeat "
+                                    "Change your repeat times number to a "
+                                    "number more then 0"
+                                )
 
-                        if n2 == 0:
-                            raise errors.EndlessRepeatError(
-                                "You can't create an endless repeat"
-                                "Change your repeat times number to a "
-                                "number more then 0"
-                            )
+                            if n2 < 0:
+                                raise errors.IncorrectRepeatDeclarationError(
+                                    "You can't create a repeat cycle with "
+                                    "with negative repeat times number"
+                                )
 
-                        if n2 < 0:
-                            raise errors.NegativeRepetitionsError(
-                                "You can't create a repeat cycle with "
-                                "with negative repeat times number"
-                            )
-
-                        cycle_body2 = []
-                        index += 1
-                        # while we haven't quited 2 loop
-                        while commands_array[index] != "ENDREPEAT":
-                            command2 = commands_array[index]
-                            split_command2 = command2.split()
-                            # --------------------------------------------
-                            # last 3rd nested loop
-                            if split_command2[0] == "REPEAT":
-                                # we've found 3rd (last) loop
-                                n3 = split_command1[1]
-                                if n3 in ascii_letters:
-                                    check_n3 = self.variables.get(n3)
-                                    if check_n3 is None:
-                                        raise errors.NotDeclaredVariableError(
-                                            f"No such variable: {n3}"
-                                        )
-
-                                    n3 = check_n3
-
-                                else:
-                                    n3 = int(n3)
-
-                                if n3 == 0:
-                                    raise errors.EndlessRepeatError(
-                                        "You can't create an endless repeat"
-                                        "Change your repeat times number to a "
-                                        "number more then 0"
-                                    )
-
-                                if n3 < 0:
-                                    raise errors.NegativeRepetitionsError(
-                                        "You can't create a repeat cycle with "
-                                        "with negative repeat times number"
-                                    )
-
-                                cycle_body3 = []
-                                index += 1
+                            cycle_body2 = []
+                            index += 1
+                            # while we haven't quited 2 loop
+                            try:
                                 while commands_array[index] != "ENDREPEAT":
-                                    if (
-                                            self.executable_commands[index]
-                                            .split()[0] in ["REPEAT", "CALL"]
-                                    ):
-                                        raise (
-                                            errors.Increasing3NestedCallsError(
-                                                "You've increased 3 nested "
-                                                "calls rule"
-                                            )
-                                        )
+                                    command2 = commands_array[index]
+                                    split_command2 = command2.split()
+                                    # --------------------------------------------
+                                    # last 3rd nested loop
+                                    if split_command2[0] == "REPEAT":
+                                        # we've found 3rd (last) loop
+                                        self.check_repeat_loop_declaration(split_command)
+                                        n3 = split_command[1]
 
-                                    cycle_body3.append(commands_array[index])
-                                    try:
+                                        check_n3 = None
+
+                                        try:
+                                            check_n3 = int(n3)
+
+                                        except ValueError:
+                                            if isinstance(n3, str):
+                                                check_n3 = self.variables.get(n3)
+                                                if check_n3 is None:
+                                                    raise errors.NotDeclaredVariableError(
+                                                        f"No such variable: {n3}"
+                                                    )
+
+                                        finally:
+                                            if check_n3 is None:
+                                                raise errors.SomethingWentWrongError(
+                                                    "Something went wrong"
+                                                )
+
+                                            n3 = check_n3
+
+                                        if n3 == 0:
+                                            raise errors.EndlessRepeatError(
+                                                "You can't create an endless repeat "
+                                                "Change your repeat times number to a "
+                                                "number more then 0"
+                                            )
+
+                                        if n3 < 0:
+                                            raise (
+                                                errors.
+                                                IncorrectRepeatDeclarationError(
+                                                    "You can't create a repeat cycle "
+                                                    "with "
+                                                    "with negative repeat times "
+                                                    "number"
+                                                ))
+
+                                        cycle_body3 = []
+                                        index += 1
+                                        try:
+                                            while commands_array[index] != "ENDREPEAT":
+                                                if (
+                                                        self.executable_commands[index].
+                                                                split()[0] in ["REPEAT", "CALL"]
+                                                ):
+                                                    raise (
+                                                        errors.Increasing3NestedCallsError(
+                                                            "You've increased 3 nested "
+                                                            "calls rule"
+                                                        )
+                                                    )
+
+                                                cycle_body3.append(commands_array[index])
+                                                index += 1
+
+                                        except IndexError:
+                                            raise errors.RepeatNotClosedError(
+                                                "Your repeat cycle is not closed"
+                                            )
+
+                                        # escaping from "ENDREPEAT" in 3rd loop
+                                        index += 1
+                                        # Adding elements from 3rd loop
+                                        # n3 times to 2nd loop's body
+                                        for _ in range(n3):
+                                            for elem in cycle_body3:
+                                                cycle_body2.append(elem)
+                                        # 3 nest done
+                                    # ---------------------------------------------#
+                                    # continuing 2 nest
+                                    ################################################
+                                    else:  # We quited 3rd loop, and now we're
+                                        # able to continue working with 2nd loop
+                                        cycle_body2.append(commands_array[index])
                                         index += 1
 
-                                    except IndexError:
-                                        raise errors.RepeatNotClosedError(
-                                            "Your repeat cycle is not closed"
-                                        )
+                            except IndexError:
+                                raise errors.RepeatNotClosedError(
+                                    "Your repeat cycle is not closed"
+                                )
 
-                                # escaping from "ENDREPEAT" in 3rd loop
-                                index += 1
-                                # Adding elements from 3rd loop
-                                # n3 times to 2nd loop's body
-                                for _ in range(n3):
-                                    for elem in cycle_body3:
-                                        cycle_body2.append(elem)
-                                # 3 nest done
-                            # ---------------------------------------------#
-                            # continuing 2 nest
-                            ################################################
-                            else:  # We quited 3rd loop, and now we're
-                                # able to continue working with 2nd loop
-                                cycle_body2.append(commands_array[index])
-                                try:
-                                    index += 1
+                            index += 1  # escaping from "ENDREPEAT" in 2nd loop
+                            # Our 2nd loop has ended. Now we have to
+                            # add elements from cycle2 n2 times to cycle1
+                            for _ in range(n2):
+                                for elem in cycle_body2:
+                                    cycle_body1.append(elem)
 
-                                except IndexError:
-                                    raise errors.RepeatNotClosedError(
-                                        "Your repeat cycle is not closed"
-                                    )
-
-                        index += 1  # escaping from "ENDREPEAT" in 2nd loop
-                        # Our 2nd loop has ended. Now we have to
-                        # add elements from cycle2 n2 times to cycle1
-                        for _ in range(n2):
-                            for elem in cycle_body2:
-                                cycle_body1.append(elem)
-
-                    #####################################################
-                    # continuing 1st nest
-                    else:  # We quited 2nd loop, and now we're able to
-                        # continue working with 1st loop
-                        cycle_body1.append(commands_array[index])
-                        try:
+                        #####################################################
+                        # continuing 1st nest
+                        else:  # We quited 2nd loop, and now we're able to
+                            # continue working with 1st loop
+                            cycle_body1.append(commands_array[index])
                             index += 1
 
-                        except IndexError:
-                            return errors.RepeatNotClosedError(
-                                "Your repeat cycle is not closed"
-                            )
+                except IndexError:
+                    return errors.RepeatNotClosedError(
+                        "Your repeat cycle is not closed"
+                    )
 
                 index += 1  # escaping from "ENDREPEAT" in 1st loop
                 for _ in range(n1):
@@ -357,7 +450,8 @@ class Interpreter:
             # End of working with procedures calling
 
             else:
-                self.executable_commands.append(command)
+                if self.check_command(command):
+                    self.executable_commands.append(command)
 
             index += 1
 
@@ -384,18 +478,29 @@ class Interpreter:
             # ########################LOOPS##############################
             # 1st loop
             if split_command[0] == "REPEAT":
+                self.check_repeat_loop_declaration(split_command)
                 n1 = split_command[1]
-                if n1 in ascii_letters:
-                    check_n1 = self.variables.get(n1)
+
+                check_n1 = None
+
+                try:
+                    check_n1 = int(n1)
+
+                except ValueError:
+                    if isinstance(n1, str):
+                        check_n1 = self.variables.get(n1)
+                        if check_n1 is None:
+                            raise errors.NotDeclaredVariableError(
+                                f"No such variable: {n1}"
+                            )
+
+                finally:
                     if check_n1 is None:
-                        raise errors.NotDeclaredVariableError(
-                            f"No such variable: {n1}"
+                        raise errors.SomethingWentWrongError(
+                            "Something went wrong"
                         )
 
                     n1 = check_n1
-
-                else:
-                    n1 = int(n1)
 
                 if n1 == 0:
                     raise errors.EndlessRepeatError(
@@ -419,19 +524,29 @@ class Interpreter:
                     ########################################################
                     # 2 nest loop
                     if split_command1[0] == "REPEAT":
+                        self.check_repeat_loop_declaration(split_command)
                         n2 = split_command1[1]
-                        if n2 in ascii_letters:
-                            check_n2 = self.variables.get(n2)
+
+                        check_n2 = None
+
+                        try:
+                            check_n2 = int(n2)
+
+                        except ValueError:
+                            if isinstance(n2, str):
+                                check_n2 = self.variables.get(n2)
+                                if check_n2 is None:
+                                    raise errors.NotDeclaredVariableError(
+                                        f"No such variable: {n2}"
+                                    )
+
+                        finally:
                             if check_n2 is None:
-                                raise errors.NotDeclaredVariableError(
-                                    f"No such variable: {n2}"
+                                raise errors.SomethingWentWrongError(
+                                    "Something went wrong"
                                 )
 
-                            else:
-                                n2 = check_n2
-
-                        else:
-                            n2 = int(n2)
+                            n2 = check_n2
 
                         if n2 == 0:
                             raise errors.EndlessRepeatError(
@@ -457,19 +572,29 @@ class Interpreter:
                             # last 3rd nested loop
                             if split_command2[0] == "REPEAT":
                                 # we've found 3rd (last) loop
+                                self.check_repeat_loop_declaration(split_command)
                                 n3 = split_command2[1]
-                                if n3 in ascii_letters:
-                                    check_n3 = self.variables.get(n3)
+
+                                check_n3 = None
+
+                                try:
+                                    check_n3 = int(n3)
+
+                                except ValueError:
+                                    if isinstance(n3, str):
+                                        check_n3 = self.variables.get(n3)
+                                        if check_n3 is None:
+                                            raise errors.NotDeclaredVariableError(
+                                                f"No such variable: {n3}"
+                                            )
+
+                                finally:
                                     if check_n3 is None:
-                                        raise errors.NotDeclaredVariableError(
-                                            f"No such variable: {n3}"
+                                        raise errors.SomethingWentWrongError(
+                                            "Something went wrong"
                                         )
 
-                                    else:
-                                        n3 = check_n3
-
-                                else:
-                                    n3 = int(n3)
+                                    n3 = check_n3
 
                                 if n3 == 0:
                                     raise errors.EndlessRepeatError(
@@ -491,7 +616,7 @@ class Interpreter:
                                 while this_comm != "ENDREPEAT":
                                     if (
                                             self.executable_commands[index]
-                                            .split()[0] in ["REPEAT", "CALL"]
+                                                    .split()[0] in ["REPEAT", "CALL"]
                                     ):
                                         raise (
                                             errors.
@@ -565,7 +690,8 @@ class Interpreter:
 
             # ########################LOOPS#############################
             else:
-                self.final_executable_commands.append(command)
+                if self.check_command(command):
+                    self.final_executable_commands.append(command)
 
             index += 1
 
@@ -581,6 +707,7 @@ class Interpreter:
 
         self.grid = grid.Grid(start_x=0, start_y=0)
         self.load_file(program_file)
+        self.check_commands()
         self.get_variables()
         self.get_procedures()
         self.first_parse(self.commands)
@@ -591,14 +718,38 @@ class Interpreter:
             command = self.final_executable_commands[i]
             command_split = command.split()
             if command_split[0] in ["UP", "DOWN", "LEFT", "RIGHT"]:
-                if command_split[1] in self.variables.keys():
-                    value_to_move = self.variables[command_split[1]]
-                else:
-                    value_to_move = int(command_split[1])
+                times_to_move = command_split[1]
 
-                self.grid.move(command_split[0], value_to_move)
+                check_times_to_move = None
 
-                self.coordinates.append((self.grid.x, self.grid.y))
+                try:
+                    check_times_to_move = int(times_to_move)
+
+                except ValueError:
+                    if isinstance(times_to_move, str):
+                        check_times_to_move = self.variables.get(times_to_move)
+                        if check_times_to_move is None:
+                            raise errors.NotDeclaredVariableError(
+                                f"No such variable: {times_to_move}"
+                            )
+
+                finally:
+                    if check_times_to_move is None:
+                        raise errors.SomethingWentWrongError(
+                            "Something went wrong"
+                        )
+
+                    times_to_move = check_times_to_move
+
+                    if times_to_move <= 0:
+                        raise errors.NotDeclaredVariableError(
+                            f"You can't move "
+                            f"{command_split[0]} "
+                            f"{times_to_move} times"
+                        )
+
+                    self.grid.move(command_split[0], times_to_move)
+                    self.coordinates.append((self.grid.x, self.grid.y))
 
             if command_split[0] == "IFBLOCK":
                 block_direction = command_split[1]
@@ -624,7 +775,48 @@ class Interpreter:
 
                     case "DOWN":
                         if self.grid.y > 0:
-                            self.final_executable_commands.pop(endif_index)
+                            command = self.final_executable_commands[i]
+                            command_split = command.split()
+                            if command_split[0] in ["UP", "DOWN", "LEFT", "RIGHT"]:
+                                times_to_move = command_split[1]
+
+                                check_times_to_move = None
+
+                                try:
+                                    check_times_to_move = int(times_to_move)
+
+                                except ValueError:
+                                    if isinstance(times_to_move, str):
+                                        check_times_to_move = self.variables.get(times_to_move)
+                                        if check_times_to_move is None:
+                                            raise errors.NotDeclaredVariableError(
+                                                f"No such variable: {times_to_move}"
+                                            )
+
+                                finally:
+                                    if check_times_to_move is None:
+                                        raise errors.SomethingWentWrongError(
+                                            "Something went wrong"
+                                        )
+
+                                    times_to_move = check_times_to_move
+
+                                    if times_to_move <= 0:
+                                        raise errors.NotDeclaredVariableError(
+                                            f"You can't move "
+                                            f"{command_split[0]} "
+                                            f"{times_to_move} times"
+                                        )
+
+                                    if times_to_move <= 0:
+                                        raise errors.NotDeclaredVariableError(
+                                            f"You can't move "
+                                            f"{command_split[0]} "
+                                            f"{times_to_move} times"
+                                        )
+
+                                    self.grid.move(command_split[0], times_to_move)
+                                    self.coordinates.append((self.grid.x, self.grid.y))
                             i += 1
                             continue
 
@@ -634,8 +826,48 @@ class Interpreter:
 
                     case "RIGHT":
                         if self.grid.x < 20:
-                            self.final_executable_commands.pop(endif_index)
-                            i += 1
+                            try:
+                                while self.final_executable_commands[i] != "ENDIF":
+                                    command = self.final_executable_commands[i]
+                                    command_split = command.split()
+                                    if command_split[0] in ["UP", "DOWN", "LEFT", "RIGHT"]:
+                                        times_to_move = command_split[1]
+
+                                        check_times_to_move = None
+
+                                        try:
+                                            check_times_to_move = int(times_to_move)
+
+                                        except ValueError:
+                                            if isinstance(times_to_move, str):
+                                                check_times_to_move = self.variables.get(times_to_move)
+                                                if check_times_to_move is None:
+                                                    raise errors.NotDeclaredVariableError(
+                                                        f"No such variable: {times_to_move}"
+                                                    )
+
+                                        finally:
+                                            if check_times_to_move is None:
+                                                raise errors.SomethingWentWrongError(
+                                                    "Something went wrong"
+                                                )
+
+                                            times_to_move = check_times_to_move
+
+                                            if times_to_move <= 0:
+                                                raise errors.NotDeclaredVariableError(
+                                                    f"You can't move "
+                                                    f"{command_split[0]} "
+                                                    f"{times_to_move} times"
+                                                )
+
+                                            self.grid.move(command_split[0], times_to_move)
+                                            self.coordinates.append((self.grid.x, self.grid.y))
+                                    i += 1
+                            except ValueError:
+                                raise errors.IFBlockNotClosedError(
+                                    "You haven't closed your ifblock"
+                                )
                             continue
 
                         else:
@@ -657,16 +889,21 @@ class Interpreter:
         return self.coordinates
 
     def load_file(self, program_file: str) -> None:
-        with open(program_file, "r") as check_file:
-            lines = check_file.read()
-            if not lines[-1].endswith("\n"):
-                with open(program_file, "a") as file:
-                    file.write("\n")
 
-        with open(program_file, "r") as file:
-            for line in file:
-                if len(line) > 2:
-                    self.commands.append(line[:-1].strip())
+        try:
+            with open(program_file, "r") as check_file:
+                lines = check_file.read()
+                if not lines[-1].endswith("\n"):
+                    with open(program_file, "a") as file:
+                        file.write("\n")
+
+            with open(program_file, "r") as file:
+                for line in file:
+                    if len(line) > 2:
+                        self.commands.append(line[:-1].strip())
+
+        except Exception:
+            raise errors.FileReadingError("Error during reading your file")
 
     def get_cords(self):
         if self.grid:
@@ -679,5 +916,5 @@ class Interpreter:
 
 if __name__ == "__main__":
     program = Interpreter()
-    res = program.execute("../test_programs/1.txt")
+    res = program.execute("../programs_4_reglament/5_e_2_2_no_endif.txt")
     print(res)

@@ -1,0 +1,5 @@
+SET rad = 0
+
+REPEAT rad
+    UP 2
+ENDREPEAT

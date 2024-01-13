@@ -1,0 +1,8 @@
+SET X = 12
+
+REPEAT X
+
+    REPEAT 4
+        RIGHT 2
+
+ENDREPEAT

@@ -9,43 +9,43 @@ class Grid:
     def move(self, _direction: int, val: int) -> None:
         match _direction:
             case "RIGHT":
-                if 0 <= (self.x + val) <= 21:
+                if 0 <= (self.x + val) <= 20:
                     self.x += val
 
                 else:
                     raise errors.GridOutOfBounceError(
-                        f"Invalid direction. It must be between 0 and 21. "
+                        f"Invalid direction. It must be between 0 and 20. "
                         f"You can't "
                         f"move right {val} times.")
 
             case "LEFT":
-                if 0 <= (self.x - val) <= 21:
+                if 0 <= (self.x - val) <= 20:
                     self.x -= val
 
                 else:
                     raise errors.GridOutOfBounceError(
                         f"Invalid direction. "
-                        f"It must be between 0 and 21. "
+                        f"It must be between 0 and 20. "
                         f"You can't "
                         f"move left {val} times.")
 
             case "UP":
-                if 0 <= (self.y + val) <= 21:
+                if 0 <= (self.y + val) <= 20:
                     self.y += val
 
                 else:
                     raise errors.GridOutOfBounceError(
-                        f"Invalid direction. It must be between 0 and 21. "
+                        f"Invalid direction. It must be between 0 and 20. "
                         f"You can't "
                         f"move up {val} times.")
 
             case "DOWN":
-                if 0 <= (self.y - val) <= 21:
+                if 0 <= (self.y - val) <= 20:
                     self.y -= val
 
                 else:
                     raise errors.GridOutOfBounceError(
-                        f"Invalid direction. It must be between 0 and 21. "
+                        f"Invalid direction. It must be between 0 and 20. "
                         f"You can't "
                         f"move down {val} times.")
 

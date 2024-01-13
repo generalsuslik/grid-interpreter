@@ -1,0 +1,11 @@
+PROCEDURE A
+
+    SET asd = 5
+    REPEAT asd
+        SET X = ytt
+        UP X
+    ENDREPEAT
+
+ENDPROC
+
+CALL A

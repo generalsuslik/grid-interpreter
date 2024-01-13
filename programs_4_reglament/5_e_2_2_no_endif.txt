@@ -1,0 +1,7 @@
+SET r = 4
+SET Y = r
+SET X = Y
+
+IFBLOCK RIGHT
+    RIGHT X
+

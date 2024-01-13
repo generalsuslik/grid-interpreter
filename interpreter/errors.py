@@ -67,6 +67,33 @@ class Increasing3NestedCallsError(Error):                 # done
         super().__init__(f"{self.__class__.__name__} --> {message}")
 
 
-class NegativeRepetitionsError(Error):             # done
+class IncorrectRepeatDeclarationError(Error):             # done
     def __init__(self, message: str) -> None:
         super().__init__(f"{self.__class__.__name__} --> {message}")
+
+
+class NoSuchCommandError(Error):
+    def __init__(self, message: str) -> None:
+        super().__init__(f"{self.__class__.__name__} --> {message}")
+
+
+class WrongSyntaxCommandError(Error):
+    def __init__(self, message: str) -> None:
+        super().__init__(f"{self.__class__.__name__} --> {message}")
+
+
+class FileReadingError(Error):
+    def __init__(self, message: str) -> None:
+        super().__init__(f"{self.__class__.__name__} --> {message}")
+
+
+class SomethingWentWrongError(Error):
+    def __init__(self, message: str) -> None:
+        super().__init__(f"{self.__class__.__name__} --> {message}")
+
+
+class ForbiddenParametersError(Error):
+    def __init__(self, message: str) -> None:
+        super().__init__(f"{self.__class__.__name__} --> {message}")
+
+
