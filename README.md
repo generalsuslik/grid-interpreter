@@ -1,6 +1,8 @@
-# GRID INTERPRETER
+# GridMaster
 
-### Starting development
-1. Instal dependences `pip install -r dev_requirements.txt`
-2. Setup precommit `pre-commit install`
-3. Enjoy
+### Запуск для разработиков
+1. Активируем виртуальную среду разработки (желательно)
+2. Ставим зависимости `pip install -r prod_requirements.txt`
+3. Запускаем основной скрипт `python main.py` или `python3 main.py`
+
+### Запуск для обычного пользователя

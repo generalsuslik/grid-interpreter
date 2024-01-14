@@ -1,6 +1,6 @@
 class Error(Exception):
     def __init__(self, message: str) -> None:
-        self.message = message
+        self.message = f"{self.__class__.__name__}: {message}"
 
     def get_message(self) -> str:
         return self.message
@@ -10,90 +10,70 @@ class Error(Exception):
 
 
 class GridOutOfBounceError(Error):               # done
-    def __init__(self, message: str) -> None:
-        super().__init__(f"{self.__class__.__name__} --> {message}")
+    pass
 
 
 class VariableNotDeclared(Error):                  # done
-    def __init__(self, message: str) -> None:
-        super().__init__(f"{self.__class__.__name__} --> {message}")
+    pass
 
 
 class ProcedureNotDeclaredError(Error):                # done
-    def __init__(self, message: str) -> None:
-        super().__init__(f"{self.__class__.__name__} --> {message}")
+    pass
 
 
 class ProcedureNotClosedError(Error):                # done
-    def __init__(self, message: str) -> None:
-        super().__init__(f"{self.__class__.__name__} --> {message}")
+    pass
 
 
 class RepeatNotClosedError(Error):                   # done
-    def __init__(self, message: str) -> None:
-        super().__init__(f"{self.__class__.__name__} --> {message}")
+    pass
 
 
 class IFBlockNotClosedError(Error):                  # done
-    def __init__(self, message: str) -> None:
-        super().__init__(f"{self.__class__.__name__} --> {message}")
+    pass
 
 
 class ExecuteAtLeastOnce(Error):
-    def __init__(
-            self,
-            message="You must execute any program at least once"
-    ) -> None:
-        super().__init__(f"{self.__class__.__name__} --> {message}")
+    pass
 
 
 class NotDeclaredVariableError(Error):                # done
-    def __init__(self, message: str) -> None:
-        super().__init__(f"{self.__class__.__name__} --> {message}")
+    pass
 
 
 class EndlessRepeatError(Error):                       # done
-    def __init__(self, message: str) -> None:
-        super().__init__(f"{self.__class__.__name__} --> {message}")
+    pass
 
 
 class ProcedureAlreadyDeclaredError(Error):              # done
-    def __init__(self, message: str) -> None:
-        super().__init__(f"{self.__class__.__name__} --> {message}")
+    pass
 
 
 class Increasing3NestedCallsError(Error):                 # done
-    def __init__(self, message: str) -> None:
-        super().__init__(f"{self.__class__.__name__} --> {message}")
+    pass
 
 
 class IncorrectRepeatDeclarationError(Error):             # done
-    def __init__(self, message: str) -> None:
-        super().__init__(f"{self.__class__.__name__} --> {message}")
+    pass
 
 
 class NoSuchCommandError(Error):
-    def __init__(self, message: str) -> None:
-        super().__init__(f"{self.__class__.__name__} --> {message}")
+    pass
 
 
 class WrongSyntaxCommandError(Error):
-    def __init__(self, message: str) -> None:
-        super().__init__(f"{self.__class__.__name__} --> {message}")
+    pass
 
 
 class FileReadingError(Error):
-    def __init__(self, message: str) -> None:
-        super().__init__(f"{self.__class__.__name__} --> {message}")
+    pass
 
 
 class SomethingWentWrongError(Error):
-    def __init__(self, message: str) -> None:
-        super().__init__(f"{self.__class__.__name__} --> {message}")
+    pass
 
 
 class ForbiddenParametersError(Error):
-    def __init__(self, message: str) -> None:
-        super().__init__(f"{self.__class__.__name__} --> {message}")
+    pass
 
 
