@@ -32,7 +32,7 @@ class TestInterpreter(unittest.TestCase):
 
         except errors.Increasing3NestedCallsError as error:
             self.assertEqual(error.message,
-                             "Increasing3NestedCallsError --> "
+                             "Increasing3NestedCallsError: "
                              "You've increased 3 nested calls rule")
 
     def test_program2(self):

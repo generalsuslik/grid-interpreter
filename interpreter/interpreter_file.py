@@ -211,7 +211,7 @@ class Interpreter:
                         ################################################
                         # 2 nest loop
                         if split_command1[0] == "REPEAT":
-                            self.check_repeat_loop_declaration(split_command)
+                            self.check_repeat_loop_declaration(split_command1)
                             n2 = split_command1[1]
 
                             check_n2 = None
@@ -259,7 +259,7 @@ class Interpreter:
                                     # last 3rd nested loop
                                     if split_command2[0] == "REPEAT":
                                         # we've found 3rd (last) loop
-                                        self.check_repeat_loop_declaration(split_command)
+                                        self.check_repeat_loop_declaration(split_command2)
                                         n3 = split_command[1]
 
                                         check_n3 = None
@@ -523,7 +523,7 @@ class Interpreter:
                     ########################################################
                     # 2 nest loop
                     if split_command1[0] == "REPEAT":
-                        self.check_repeat_loop_declaration(split_command)
+                        self.check_repeat_loop_declaration(split_command1)
                         n2 = split_command1[1]
 
                         check_n2 = None
@@ -571,7 +571,7 @@ class Interpreter:
                             # last 3rd nested loop
                             if split_command2[0] == "REPEAT":
                                 # we've found 3rd (last) loop
-                                self.check_repeat_loop_declaration(split_command)
+                                self.check_repeat_loop_declaration(split_command2)
                                 n3 = split_command2[1]
 
                                 check_n3 = None
