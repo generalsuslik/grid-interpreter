@@ -75,5 +75,3 @@ class SomethingWentWrongError(Error):
 
 class ForbiddenParametersError(Error):
     pass
-
-

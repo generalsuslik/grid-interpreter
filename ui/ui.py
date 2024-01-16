@@ -26,6 +26,17 @@ class Ui(QtWidgets.QMainWindow):
         self.db = db_manager
         self.logger = logger
         self.interpreter = interpreter
+        # load settings
+        self.config = self.db.get_settings()
+        self.save_on_close = self.config.get("save_on_exit", "1") == "1"
+        self.default_filename = self.config.get("default_filename", "program")
+        self.editor_font_family = self.config.get(
+            "font_name",
+            "Cascadia Code"
+        )
+        self.editor_font_size = int(self.config.get("font_size", "12"))
+
+        # lets build UI
         uic.loadUi("./ui/main.ui", self)
         self.open_file_btn.clicked.connect(self.open_file)
         self.new_file_btn.clicked.connect(self.create_file)
@@ -80,7 +91,7 @@ class Ui(QtWidgets.QMainWindow):
             btn.setMinimumSize(32, 32)
             self.recent_layout.addWidget(btn)
 
-    def open_file(self, event, filename=""):
+    def open_file(self, event=None, filename=""):
         if not filename:
             filename, _ = QtWidgets.QFileDialog.getOpenFileName(
                 None, "Open File", "./", "File with code (*.txt)"
@@ -98,13 +109,14 @@ class Ui(QtWidgets.QMainWindow):
         else:
             self.log("You didn't selected file")
 
-    def create_file(self, event):
+    def create_file(self, event=None):
         self.filename = ""
         self.code_field.setText("")
 
-    def save_file(self, event):
+    def save_file(self, event=None):
         if not self.filename:
             self.filename, _ = QtWidgets.QFileDialog.getSaveFileName(
+                directory=self.default_filename,
                 filter="*.txt"
             )
         if self.filename:
@@ -112,7 +124,7 @@ class Ui(QtWidgets.QMainWindow):
                 f.write(self.code_field.text())
                 self.db.update_recent(self.filename, time.time())
 
-    def execute_code(self, event):
+    def execute_code(self, event=None):
         self.save_file(None)
         try:
             self.way = self.interpreter.execute(self.filename)
@@ -155,10 +167,14 @@ class Ui(QtWidgets.QMainWindow):
             self.logs.insertPlainText(f"Ida> {text}\n")
             self.logs.setCurrentCharFormat(self.default_log_style)
 
-    def open_settings(self, event):
-        self.settings_dialog = Settings()
+    def open_settings(self, event=None):
+        self.settings_dialog = Settings(self.db, self)
         self.settings_dialog.show()
 
-    def resizeEvent(self, event):
+    def resizeEvent(self, event=None):
         super().resizeEvent(event)
         self.preview.update(self.way)
+
+    def closeEvent(self, event=None):
+        if self.save_on_close:
+            self.save_file()

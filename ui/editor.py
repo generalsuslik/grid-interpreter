@@ -5,12 +5,12 @@ from .highlight import Lexer
 
 
 class Editor(QsciScintilla):
-    def __init__(self, main_window, parent=None):
+    def __init__(self, parent=None):
         super(Editor, self).__init__(parent)
-        self.main_window = main_window
-        font = QFont()
+        self.parent = parent
+        font = QFont(self.parent.editor_font_family)
         font.setFixedPitch(True)
-        font.setPointSize(12)
+        font.setPointSize(self.parent.editor_font_size)
         self.setFont(font)
         self.setMarginsFont(font)
         self.setUtf8(True)
