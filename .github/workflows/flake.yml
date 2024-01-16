@@ -16,8 +16,8 @@ jobs:
       - name: flake8 Lint
         uses: py-actions/flake8@v2
         with:
-          ignore: "F401"
-          max-line-length: "79"
+          ignore: "F401,W503"
+          max-line-length: "99"
           path: "."
           exclude: "./ui/assets/*,./interpreter/test_programs/*"
           plugins: "flake8-alphabetize"

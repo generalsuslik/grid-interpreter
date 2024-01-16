@@ -108,7 +108,10 @@ class Interpreter:
         command_title = command_split[0]
 
         match command_title:
-            case "RIGHT" | "LEFT" | "UP" | "DOWN" | "REPEAT" | "PROCEDURE" | "IFBLOCK" | "CALL":
+            case (
+                "RIGHT" | "LEFT" | "UP" | "DOWN" | "REPEAT"
+                | "PROCEDURE" | "IFBLOCK" | "CALL"
+            ):
                 return len(command_split) == 2
 
             case "ENDPROC" | "PROCEDURE" | "ENDIF" | "ENDREPEAT":
@@ -255,11 +258,13 @@ class Interpreter:
                                 while commands_array[index] != "ENDREPEAT":
                                     command2 = commands_array[index]
                                     split_command2 = command2.split()
-                                    # --------------------------------------------
+                                    # ----------------------------------------
                                     # last 3rd nested loop
                                     if split_command2[0] == "REPEAT":
                                         # we've found 3rd (last) loop
-                                        self.check_repeat_loop_declaration(split_command2)
+                                        self.check_repeat_loop_declaration(
+                                            split_command2
+                                        )
                                         n3 = split_command[1]
 
                                         check_n3 = None
@@ -839,7 +844,10 @@ class Interpreter:
 
                                         except ValueError:
                                             if isinstance(times_to_move, str):
-                                                check_times_to_move = self.variables.get(times_to_move)
+                                                check_times_to_move = (
+                                                    self.variables.
+                                                    get(times_to_move)
+                                                )
                                                 if check_times_to_move is None:
                                                     raise errors.NotDeclaredVariableError(
                                                         f"No such variable: {times_to_move}"
@@ -860,8 +868,13 @@ class Interpreter:
                                                     f"{times_to_move} times"
                                                 )
 
-                                            self.grid.move(command_split[0], times_to_move)
-                                            self.coordinates.append((self.grid.x, self.grid.y))
+                                            self.grid.move(
+                                                command_split[0],
+                                                times_to_move
+                                            )
+                                            self.coordinates.append(
+                                                (self.grid.x, self.grid.y)
+                                            )
                                     i += 1
                             except ValueError:
                                 raise errors.IFBlockNotClosedError(
@@ -907,7 +920,9 @@ class Interpreter:
     def get_cords(self):
         if self.grid:
             return self.grid.get_coords()
-        raise errors.ExecuteAtLeastOnce("You have to execute your program at least once")
+        raise errors.ExecuteAtLeastOnce(
+            "You have to execute your program at least once"
+        )
 
     def __str__(self):
         return f"{self.coordinates}"
@@ -915,5 +930,7 @@ class Interpreter:
 
 if __name__ == "__main__":
     program = Interpreter()
-    res = program.execute("../programs_4_reglament/5_c_forbidden_parametres.txt")
+    res = program.execute(
+        "../programs_4_reglament/5_c_forbidden_parametres.txt"
+    )
     print(res)

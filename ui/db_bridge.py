@@ -18,6 +18,17 @@ class DBManager:
                         );
                 '''
             )
+        if not ("settings",) in self.cur.execute(sql_query).fetchall():
+            self.cur.execute(
+                '''
+                CREATE TABLE "settings" (
+                    "id"	INTEGER NOT NULL UNIQUE,
+                    "name"	TEXT NOT NULL UNIQUE,
+                    "value"	TEXT NOT NULL,
+                    PRIMARY KEY("id" AUTOINCREMENT)
+                );
+            '''
+            )
 
     def update_recent(self, filename, time):
         sql_query = f"""
@@ -50,3 +61,22 @@ class DBManager:
         if f:
             return self.get_recent()
         return files
+
+    def get_settings(self):
+        sql_query = '''
+        SELECT * from settings
+        '''
+        query_res = self.cur.execute(sql_query).fetchall()
+        settings = {name: value for i, name, value in query_res}
+        return settings
+
+    def save_settings(self, settings):
+        sql_query = ""
+        for key, value in settings.items():
+            sql_query += f"""
+                    INSERT INTO settings (name, value)
+                    VALUES ("{key}", "{value}")
+                    ON CONFLICT(name) DO UPDATE SET value = "{value}";
+                    """
+        self.cur.executescript(sql_query)
+        self.conn.commit()
