@@ -1,0 +1,19 @@
+IFBLOCK RIGHT
+
+    RIGHT 2
+    IFBLOCK DOWN
+        DOWN 2
+        IFBLOCK LEFT
+            LEFT 10
+        ENDIF
+    ENDIF
+
+    IFBLOCK UP
+        UP 2
+        SET X = 4
+
+        UP X
+
+    ENDIF
+
+ENDIF

@@ -1,0 +1,16 @@
+REPEAT 2
+
+    SET X = 2
+
+    REPEAT 4
+        REPEAT X
+
+            REPEAT 2
+
+                UP X
+
+            ENDREPEAT
+
+        ENDREPEAT
+    ENDREPEAT
+ENDREPEAT

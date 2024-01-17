@@ -4,4 +4,3 @@ SET X = Y
 
 IFBLOCK RIGHT
     RIGHT X
-

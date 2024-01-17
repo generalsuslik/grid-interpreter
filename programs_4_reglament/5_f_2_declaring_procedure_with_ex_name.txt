@@ -1,0 +1,18 @@
+PROCEDURE proc
+
+    SET X = 2
+    IFBLOCK RIGHT
+        REPEAT X
+            RIGHT X
+            UP 2
+        ENDREPEAT
+    ENDIF
+
+ENDPROC
+
+
+PROCEDURE proc
+
+    UP 2
+
+ENDPROC

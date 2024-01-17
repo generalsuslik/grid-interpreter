@@ -48,3 +48,15 @@ class TestInterpreter(unittest.TestCase):
         interpreter = interpreter_file.Interpreter()
         with self.assertRaises(errors.ExecuteAtLeastOnce):
             interpreter.get_cords()
+
+    def test_ifblocks1(self):
+        interpreter = interpreter_file.Interpreter()
+        result = interpreter.execute("test_programs/test_ifblocks1.txt")
+
+        self.assertEqual(result, [(0, 0), (2, 0), (2, 2), (2, 6)])
+
+    def test_ifblocks2(self):
+        interpreter = interpreter_file.Interpreter()
+        result = interpreter.execute("test_programs/test_ifblocks2.txt")
+
+        self.assertEqual(result, [(0, 0), (0, 4), (2, 4), (2, 20), (6, 20), (20, 20)])

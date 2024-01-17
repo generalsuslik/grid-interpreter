@@ -1,0 +1,8 @@
+PROCEDURE B
+    REPEAT 5
+        RIGHT 2
+    ENDREPEAT
+ENDPROC
+
+
+CALL A

@@ -16,7 +16,8 @@ class Grid:
                     raise errors.GridOutOfBounceError(
                         f"Invalid direction. It must be between 0 and 20. "
                         f"You can't "
-                        f"move right {val} times.")
+                        f"move right {val} times. "
+                        f"Your previous position: {self.get_coords()}")
 
             case "LEFT":
                 if 0 <= (self.x - val) <= 20:
@@ -27,7 +28,8 @@ class Grid:
                         f"Invalid direction. "
                         f"It must be between 0 and 20. "
                         f"You can't "
-                        f"move left {val} times.")
+                        f"move left {val} times. "
+                        f"Your previous position: {self.get_coords()}")
 
             case "UP":
                 if 0 <= (self.y + val) <= 20:
@@ -37,7 +39,8 @@ class Grid:
                     raise errors.GridOutOfBounceError(
                         f"Invalid direction. It must be between 0 and 20. "
                         f"You can't "
-                        f"move up {val} times.")
+                        f"move up {val} times. "
+                        f"Your previous position: {self.get_coords()}")
 
             case "DOWN":
                 if 0 <= (self.y - val) <= 20:
@@ -47,7 +50,8 @@ class Grid:
                     raise errors.GridOutOfBounceError(
                         f"Invalid direction. It must be between 0 and 20. "
                         f"You can't "
-                        f"move down {val} times.")
+                        f"move down {val} times. "
+                        f"Your previous position: {self.get_coords()}")
 
     def get_coords(self):
         return self.x, self.y
