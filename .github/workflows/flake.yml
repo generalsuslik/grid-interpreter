@@ -17,7 +17,7 @@ jobs:
         uses: py-actions/flake8@v2
         with:
           ignore: "F401,W503"
-          max-line-length: "99"
+          max-line-length: "120"
           path: "."
           exclude: "./ui/assets/*,./interpreter/test_programs/*"
           plugins: "flake8-alphabetize"
