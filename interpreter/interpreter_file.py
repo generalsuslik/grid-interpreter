@@ -810,7 +810,7 @@ class Interpreter:
 
                 index += 1
                 if block_direction == "UP":
-                    if not self.grid.y < 20:
+                    if self.grid.y < 20:
                         while self.final_executable_commands[index] != "ENDIF":
                             index += 1
                         index += 1
@@ -864,7 +864,7 @@ class Interpreter:
                             index += 1
                             # first ifblock up -> second ifblock up
                             if block_direction1 == "UP":
-                                if not self.grid.y < 20:
+                                if self.grid.y < 20:
                                     while self.final_executable_commands[index] != "ENDIF":
                                         index += 1
                                     index += 1
@@ -923,7 +923,7 @@ class Interpreter:
                                         # first ifblock up -> second ifblock up ->
                                         # third ifblock up
                                         if block_direction2 == "UP":
-                                            if not self.grid.y < 20:
+                                            if self.grid.y < 20:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -985,7 +985,7 @@ class Interpreter:
                                         # first ifblock up -> second ifblock up ->
                                         # third ifblock down
                                         if block_direction2 == "DOWN":
-                                            if not self.grid.y > 0:
+                                            if self.grid.y > 0:
                                                 while (self.final_executable_commands[index]
                                                        != "ENDIF"):
                                                     index += 1
@@ -1045,7 +1045,7 @@ class Interpreter:
                                         # first ifblock up -> second ifblock up ->
                                         # third ifblock right
                                         if block_direction2 == "RIGHT":
-                                            if not self.grid.x < 20:
+                                            if self.grid.x < 20:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -1104,7 +1104,7 @@ class Interpreter:
                                         # first ifblock up -> second ifblock up ->
                                         # third ifblock left
                                         if block_direction2 == "LEFT":
-                                            if not self.grid.x > 0:
+                                            if self.grid.x > 0:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -1161,7 +1161,7 @@ class Interpreter:
 
                             # first ifblock up -> second ifblock down
                             if block_direction1 == "DOWN":
-                                if not self.grid.y > 0:
+                                if self.grid.y > 0:
                                     while self.final_executable_commands[index] != "ENDIF":
                                         index += 1
                                     index += 1
@@ -1220,7 +1220,7 @@ class Interpreter:
                                         # first ifblock up -> second ifblock up ->
                                         # third ifblock up
                                         if block_direction2 == "UP":
-                                            if not self.grid.y < 20:
+                                            if self.grid.y < 20:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -1281,7 +1281,7 @@ class Interpreter:
                                         # first ifblock up -> second ifblock up ->
                                         # third ifblock down
                                         if block_direction2 == "DOWN":
-                                            if not self.grid.y > 0:
+                                            if self.grid.y > 0:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -1341,7 +1341,7 @@ class Interpreter:
                                         # first ifblock up -> second ifblock up ->
                                         # third ifblock right
                                         if block_direction2 == "RIGHT":
-                                            if not self.grid.x < 20:
+                                            if self.grid.x < 20:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -1399,7 +1399,7 @@ class Interpreter:
                                         # first ifblock up -> second ifblock up ->
                                         # third ifblock left
                                         if block_direction2 == "LEFT":
-                                            if not self.grid.x > 0:
+                                            if self.grid.x > 0:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -1456,7 +1456,7 @@ class Interpreter:
 
                             # first ifblock up -> second ifblock right
                             if block_direction1 == "RIGHT":
-                                if not self.grid.x < 20:
+                                if self.grid.x < 20:
                                     while self.final_executable_commands[index] != "ENDIF":
                                         index += 1
                                     index += 1
@@ -1515,7 +1515,7 @@ class Interpreter:
                                         # first ifblock up -> second ifblock right ->
                                         # third ifblock up
                                         if block_direction2 == "UP":
-                                            if not self.grid.y < 20:
+                                            if self.grid.y < 20:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -1572,7 +1572,7 @@ class Interpreter:
                                         # first ifblock up -> second ifblock right ->
                                         # third ifblock down
                                         if block_direction2 == "DOWN":
-                                            if not self.grid.y > 0:
+                                            if self.grid.y > 0:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -1632,7 +1632,7 @@ class Interpreter:
                                         # first ifblock up -> second ifblock right ->
                                         # third ifblock right
                                         if block_direction2 == "RIGHT":
-                                            if not self.grid.x < 20:
+                                            if self.grid.x < 20:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -1688,7 +1688,7 @@ class Interpreter:
                                         # first ifblock up -> second ifblock right ->
                                         # third ifblock left
                                         if block_direction2 == "LEFT":
-                                            if not self.grid.x > 0:
+                                            if self.grid.x > 0:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -1743,7 +1743,7 @@ class Interpreter:
 
                             # first ifblock up -> second ifblock left
                             if block_direction1 == "LEFT":
-                                if not self.grid.x > 0:
+                                if self.grid.x > 0:
                                     while self.final_executable_commands[index] != "ENDIF":
                                         index += 1
                                     index += 1
@@ -1803,7 +1803,7 @@ class Interpreter:
                                         # first ifblock up -> second ifblock left ->
                                         # third ifblock up
                                         if block_direction2 == "UP":
-                                            if not self.grid.y < 20:
+                                            if self.grid.y < 20:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -1861,7 +1861,7 @@ class Interpreter:
                                         # first ifblock up -> second ifblock left ->
                                         # third ifblock down
                                         if block_direction2 == "DOWN":
-                                            if not self.grid.y > 0:
+                                            if self.grid.y > 0:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -1922,7 +1922,7 @@ class Interpreter:
                                         # first ifblock up -> second ifblock left ->
                                         # third ifblock right
                                         if block_direction2 == "RIGHT":
-                                            if not self.grid.x < 20:
+                                            if self.grid.x < 20:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -1980,7 +1980,7 @@ class Interpreter:
                                         # first ifblock up -> second ifblock left ->
                                         # third ifblock left
                                         if block_direction2 == "LEFT":
-                                            if not self.grid.x > 0:
+                                            if self.grid.x > 0:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -2037,7 +2037,7 @@ class Interpreter:
                 #  continuing first ifblock down
                 # ###############################################################################1
                 if block_direction == "DOWN":
-                    if not self.grid.y > 0:
+                    if self.grid.y > 0:
                         while self.final_executable_commands[index] != "ENDIF":
                             index += 1
                         index += 1
@@ -2091,7 +2091,7 @@ class Interpreter:
                             index += 1
                             # first ifblock down -> second ifblock up
                             if block_direction1 == "UP":
-                                if not self.grid.y < 20:
+                                if self.grid.y < 20:
                                     while self.final_executable_commands[index] != "ENDIF":
                                         index += 1
                                     index += 1
@@ -2151,7 +2151,7 @@ class Interpreter:
                                         # first ifblock down -> second ifblock up ->
                                         # third ifblock up
                                         if block_direction2 == "UP":
-                                            if not self.grid.y < 20:
+                                            if self.grid.y < 20:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -2207,7 +2207,7 @@ class Interpreter:
                                         # first ifblock down -> second ifblock up ->
                                         # third ifblock down
                                         if block_direction2 == "DOWN":
-                                            if not self.grid.y > 0:
+                                            if self.grid.y > 0:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -2268,7 +2268,7 @@ class Interpreter:
                                         # first ifblock down -> second ifblock up ->
                                         # third ifblock right
                                         if block_direction2 == "RIGHT":
-                                            if not self.grid.x < 20:
+                                            if self.grid.x < 20:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -2325,7 +2325,7 @@ class Interpreter:
                                         # first ifblock down -> second ifblock up ->
                                         # third ifblock left
                                         if block_direction2 == "LEFT":
-                                            if not self.grid.x > 0:
+                                            if self.grid.x > 0:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -2380,7 +2380,7 @@ class Interpreter:
 
                             # first ifblock down -> second ifblock down
                             if block_direction1 == "DOWN":
-                                if not self.grid.y > 0:
+                                if self.grid.y > 0:
                                     while self.final_executable_commands[index] != "ENDIF":
                                         index += 1
                                     index += 1
@@ -2440,7 +2440,7 @@ class Interpreter:
                                         # first ifblock down -> second ifblock down ->
                                         # third ifblock up
                                         if block_direction2 == "UP":
-                                            if not self.grid.y < 20:
+                                            if self.grid.y < 20:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -2496,7 +2496,7 @@ class Interpreter:
                                         # first ifblock down -> second ifblock down ->
                                         # third ifblock down
                                         if block_direction2 == "DOWN":
-                                            if not self.grid.y > 0:
+                                            if self.grid.y > 0:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -2556,7 +2556,7 @@ class Interpreter:
                                         # first ifblock down -> second ifblock down ->
                                         # third ifblock right
                                         if block_direction2 == "RIGHT":
-                                            if not self.grid.x < 20:
+                                            if self.grid.x < 20:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -2613,7 +2613,7 @@ class Interpreter:
                                         # first ifblock down -> second ifblock down ->
                                         # third ifblock left
                                         if block_direction2 == "LEFT":
-                                            if not self.grid.x > 0:
+                                            if self.grid.x > 0:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -2674,7 +2674,7 @@ class Interpreter:
 
                             # first ifblock down -> second ifblock right
                             if block_direction1 == "RIGHT":
-                                if not self.grid.x < 20:
+                                if self.grid.x < 20:
                                     while self.final_executable_commands[index] != "ENDIF":
                                         index += 1
                                     index += 1
@@ -2734,7 +2734,7 @@ class Interpreter:
                                         # first ifblock down -> second ifblock right ->
                                         # third ifblock up
                                         if block_direction2 == "UP":
-                                            if not self.grid.y < 20:
+                                            if self.grid.y < 20:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -2795,7 +2795,7 @@ class Interpreter:
                                         # first ifblock down -> second ifblock right ->
                                         # third ifblock down
                                         if block_direction2 == "DOWN":
-                                            if not self.grid.y > 0:
+                                            if self.grid.y > 0:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -2856,7 +2856,7 @@ class Interpreter:
                                         # ffirst ifblock down -> second ifblock right ->
                                         # third ifblock right
                                         if block_direction2 == "RIGHT":
-                                            if not self.grid.x < 20:
+                                            if self.grid.x < 20:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -2914,7 +2914,7 @@ class Interpreter:
                                         # first ifblock down -> second ifblock right ->
                                         # third ifblock left
                                         if block_direction2 == "LEFT":
-                                            if not self.grid.x > 0:
+                                            if self.grid.x > 0:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -2971,7 +2971,7 @@ class Interpreter:
 
                             # first ifblock down -> second ifblock left
                             if block_direction1 == "LEFT":
-                                if not self.grid.x > 0:
+                                if self.grid.x > 0:
                                     while self.final_executable_commands[index] != "ENDIF":
                                         index += 1
                                     index += 1
@@ -3031,7 +3031,7 @@ class Interpreter:
                                         # first ifblock down -> second ifblock left ->
                                         # third ifblock up
                                         if block_direction2 == "UP":
-                                            if not self.grid.y < 20:
+                                            if self.grid.y < 20:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -3093,7 +3093,7 @@ class Interpreter:
                                         # first ifblock down -> second ifblock left ->
                                         # third ifblock down
                                         if block_direction2 == "DOWN":
-                                            if not self.grid.y > 0:
+                                            if self.grid.y > 0:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -3155,7 +3155,7 @@ class Interpreter:
                                         # ffirst ifblock down -> second ifblock left ->
                                         # third ifblock right
                                         if block_direction2 == "RIGHT":
-                                            if not self.grid.x < 20:
+                                            if self.grid.x < 20:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -3214,7 +3214,7 @@ class Interpreter:
                                         # first ifblock down -> second ifblock left ->
                                         # third ifblock left
                                         if block_direction2 == "LEFT":
-                                            if not self.grid.x > 0:
+                                            if self.grid.x > 0:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -3271,7 +3271,7 @@ class Interpreter:
 
                 # continuing first ifblock right
                 if block_direction == "RIGHT":
-                    if not self.grid.x < 20:
+                    if self.grid.x < 20:
                         while self.final_executable_commands[index] != "ENDIF":
                             index += 1
                         index += 1
@@ -3326,7 +3326,7 @@ class Interpreter:
 
                             # first ifblock right -> second ifblock up
                             if block_direction1 == "UP":
-                                if not self.grid.y < 20:
+                                if self.grid.y < 20:
                                     while self.final_executable_commands[index] != "ENDIF":
                                         index += 1
                                     index += 1
@@ -3386,7 +3386,7 @@ class Interpreter:
                                         # first ifblock right -> second ifblock up ->
                                         # third ifblock up
                                         if block_direction2 == "UP":
-                                            if not self.grid.y < 20:
+                                            if self.grid.y < 20:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -3444,7 +3444,7 @@ class Interpreter:
                                         # first ifblock right -> second ifblock up ->
                                         # third ifblock down
                                         if block_direction2 == "DOWN":
-                                            if not self.grid.y > 0:
+                                            if self.grid.y > 0:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -3506,7 +3506,7 @@ class Interpreter:
                                         # first ifblock right -> second ifblock up ->
                                         # third ifblock right
                                         if block_direction2 == "RIGHT":
-                                            if not self.grid.x < 20:
+                                            if self.grid.x < 20:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -3565,7 +3565,7 @@ class Interpreter:
                                         # first ifblock right -> second ifblock up ->
                                         # third ifblock left
                                         if block_direction2 == "LEFT":
-                                            if not self.grid.x > 0:
+                                            if self.grid.x > 0:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -3622,7 +3622,7 @@ class Interpreter:
 
                             # first ifblock right -> second ifblock down
                             if block_direction1 == "DOWN":
-                                if not self.grid.y > 0:
+                                if self.grid.y > 0:
                                     while self.final_executable_commands[index] != "ENDIF":
                                         index += 1
                                     index += 1
@@ -3682,7 +3682,7 @@ class Interpreter:
                                         # first ifblock right -> second ifblock down ->
                                         # third ifblock up
                                         if block_direction2 == "UP":
-                                            if not self.grid.y < 20:
+                                            if self.grid.y < 20:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -3740,7 +3740,7 @@ class Interpreter:
                                         # first ifblock right -> second ifblock down ->
                                         # third ifblock down
                                         if block_direction2 == "DOWN":
-                                            if not self.grid.y > 0:
+                                            if self.grid.y > 0:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -3802,7 +3802,7 @@ class Interpreter:
                                         # first ifblock right -> second ifblock down ->
                                         # third ifblock right
                                         if block_direction2 == "RIGHT":
-                                            if not self.grid.x < 20:
+                                            if self.grid.x < 20:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -3860,7 +3860,7 @@ class Interpreter:
                                         # first ifblock right -> second ifblock down ->
                                         # third ifblock left
                                         if block_direction2 == "LEFT":
-                                            if not self.grid.x > 0:
+                                            if self.grid.x > 0:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -3978,7 +3978,7 @@ class Interpreter:
                                         # first ifblock right -> second ifblock right ->
                                         # third ifblock up
                                         if block_direction2 == "UP":
-                                            if not self.grid.y < 20:
+                                            if self.grid.y < 20:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -4036,7 +4036,7 @@ class Interpreter:
                                         # first ifblock right -> second ifblock right ->
                                         # third ifblock down
                                         if block_direction2 == "DOWN":
-                                            if not self.grid.y > 0:
+                                            if self.grid.y > 0:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -4098,7 +4098,7 @@ class Interpreter:
                                         # first ifblock right -> second ifblock right ->
                                         # third ifblock right
                                         if block_direction2 == "RIGHT":
-                                            if not self.grid.x < 20:
+                                            if self.grid.x < 20:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -4156,7 +4156,7 @@ class Interpreter:
                                         # first ifblock right -> second ifblock right ->
                                         # third ifblock left
                                         if block_direction2 == "LEFT":
-                                            if not self.grid.x > 0:
+                                            if self.grid.x > 0:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -4273,7 +4273,7 @@ class Interpreter:
                                         # first ifblock right -> second ifblock left ->
                                         # third ifblock up
                                         if block_direction2 == "UP":
-                                            if not self.grid.y < 20:
+                                            if self.grid.y < 20:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -4332,7 +4332,7 @@ class Interpreter:
                                         # first ifblock right -> second ifblock left ->
                                         # third ifblock down
                                         if block_direction2 == "DOWN":
-                                            if not self.grid.y > 0:
+                                            if self.grid.y > 0:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -4394,7 +4394,7 @@ class Interpreter:
                                         # first ifblock right -> second ifblock left ->
                                         # third ifblock right
                                         if block_direction2 == "RIGHT":
-                                            if not self.grid.x < 20:
+                                            if self.grid.x < 20:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -4452,7 +4452,7 @@ class Interpreter:
                                         # first ifblock right -> second ifblock left ->
                                         # third ifblock left
                                         if block_direction2 == "LEFT":
-                                            if not self.grid.x > 0:
+                                            if self.grid.x > 0:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -4509,7 +4509,7 @@ class Interpreter:
 
                 # continuing first ifblock left
                 if block_direction == "LEFT":
-                    if not self.grid.x > 0:
+                    if self.grid.x > 0:
                         while self.final_executable_commands[index] != "ENDIF":
                             index += 1
                         index += 1
@@ -4564,7 +4564,7 @@ class Interpreter:
                             # first ifblock left -> second ifblock ->
                             # second ifblock up
                             if block_direction1 == "UP":
-                                if not self.grid.y < 20:
+                                if self.grid.y < 20:
                                     while self.final_executable_commands[index] != "ENDIF":
                                         index += 1
                                     index += 1
@@ -4624,7 +4624,7 @@ class Interpreter:
                                         # first ifblock left -> second ifblock up ->
                                         # third ifblock up
                                         if block_direction2 == "UP":
-                                            if not self.grid.y < 20:
+                                            if self.grid.y < 20:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -4682,7 +4682,7 @@ class Interpreter:
                                         # first ifblock left -> second ifblock up ->
                                         # third ifblock down
                                         if block_direction2 == "DOWN":
-                                            if not self.grid.y > 0:
+                                            if self.grid.y > 0:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -4744,7 +4744,7 @@ class Interpreter:
                                         # first ifblock left -> second ifblock up ->
                                         # third ifblock right
                                         if block_direction2 == "RIGHT":
-                                            if not self.grid.x < 20:
+                                            if self.grid.x < 20:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -4802,7 +4802,7 @@ class Interpreter:
                                         # first ifblock left -> second ifblock up ->
                                         # third ifblock left
                                         if block_direction2 == "LEFT":
-                                            if not self.grid.x > 0:
+                                            if self.grid.x > 0:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -4920,7 +4920,7 @@ class Interpreter:
                                         # first ifblock left -> second ifblock down ->
                                         # third ifblock up
                                         if block_direction2 == "UP":
-                                            if not self.grid.y < 20:
+                                            if self.grid.y < 20:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -4978,7 +4978,7 @@ class Interpreter:
                                         # first ifblock left -> second ifblock down ->
                                         # third ifblock down
                                         if block_direction2 == "DOWN":
-                                            if not self.grid.y > 0:
+                                            if self.grid.y > 0:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -5040,7 +5040,7 @@ class Interpreter:
                                         # first ifblock left -> second ifblock down ->
                                         # third ifblock right
                                         if block_direction2 == "RIGHT":
-                                            if not self.grid.x < 20:
+                                            if self.grid.x < 20:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -5102,7 +5102,7 @@ class Interpreter:
                                         # first ifblock left -> second ifblock down ->
                                         # third ifblock left
                                         if block_direction2 == "LEFT":
-                                            if not self.grid.x > 0:
+                                            if self.grid.x > 0:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -5220,7 +5220,7 @@ class Interpreter:
                                         # first ifblock left -> second ifblock right ->
                                         # third ifblock up
                                         if block_direction2 == "UP":
-                                            if not self.grid.y < 20:
+                                            if self.grid.y < 20:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -5278,7 +5278,7 @@ class Interpreter:
                                         # first ifblock left -> second ifblock right ->
                                         # third ifblock down
                                         if block_direction2 == "DOWN":
-                                            if not self.grid.y > 0:
+                                            if self.grid.y > 0:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -5340,7 +5340,7 @@ class Interpreter:
                                         # first ifblock left -> second ifblock right ->
                                         # third ifblock right
                                         if block_direction2 == "RIGHT":
-                                            if not self.grid.x < 20:
+                                            if self.grid.x < 20:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -5398,7 +5398,7 @@ class Interpreter:
                                         # first ifblock left -> second ifblock right ->
                                         # third ifblock left
                                         if block_direction2 == "LEFT":
-                                            if not self.grid.x > 0:
+                                            if self.grid.x > 0:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -5517,7 +5517,7 @@ class Interpreter:
                                         # first ifblock left -> second ifblock left ->
                                         # third ifblock up
                                         if block_direction2 == "UP":
-                                            if not self.grid.y < 20:
+                                            if self.grid.y < 20:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -5578,7 +5578,7 @@ class Interpreter:
                                         # first ifblock left -> second ifblock left ->
                                         # third ifblock down
                                         if block_direction2 == "DOWN":
-                                            if not self.grid.y > 0:
+                                            if self.grid.y > 0:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -5640,7 +5640,7 @@ class Interpreter:
                                         # first ifblock left -> second ifblock left ->
                                         # third ifblock right
                                         if block_direction2 == "RIGHT":
-                                            if not self.grid.x < 20:
+                                            if self.grid.x < 20:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -5698,7 +5698,7 @@ class Interpreter:
                                         # first ifblock left -> second ifblock left ->
                                         # third ifblock left
                                         if block_direction2 == "LEFT":
-                                            if not self.grid.x > 0:
+                                            if self.grid.x > 0:
                                                 while self.final_executable_commands[index] != "ENDIF":
                                                     index += 1
                                                 index += 1
@@ -5804,5 +5804,5 @@ class Interpreter:
 
 if __name__ == "__main__":
     program = Interpreter()
-    res = program.execute("../test_programs/program_check.txt")
+    res = program.execute("../test_programs/program2.txt")
     print(res)

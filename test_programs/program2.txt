@@ -1,6 +1,6 @@
 IFBLOCK LEFT
 
-    LEFT 2
+    RIGHT 2
 
 ENDIF
 
@@ -11,7 +11,7 @@ REPEAT X
     RIGHT 2
     IFBLOCK UP
 
-        UP 10
+        DOWN 10
         REPEAT 2
             LEFT 1
         ENDREPEAT

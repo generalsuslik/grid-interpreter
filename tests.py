@@ -7,9 +7,9 @@ class TestInterpreter(unittest.TestCase):
 
     def test_same_program_multiple_executing(self):
         interpreter = interpreter_file.Interpreter()
-        result1 = interpreter.execute("test_programs/program2.txt")
-        result2 = interpreter.execute("test_programs/program2.txt")
-        result3 = interpreter.execute("test_programs/program2.txt")
+        result1 = interpreter.execute("test_programs/test1.txt")
+        result2 = interpreter.execute("test_programs/test1.txt")
+        result3 = interpreter.execute("test_programs/test1.txt")
 
         self.assertEqual(result1, result2, result3)
 
@@ -38,10 +38,8 @@ class TestInterpreter(unittest.TestCase):
         interpreter = interpreter_file.Interpreter()
         result = interpreter.execute("test_programs/program2.txt")
 
-        self.assertEqual(result,
-                         [(0, 0), (2, 0), (2, 10), (1, 10), (0, 10), (2, 10),
-                          (2, 20), (1, 20), (0, 20), (2, 20)])
-        self.assertEqual(interpreter.interpreter_get_coords(), (2, 20))
+        self.assertEqual(result, [(0, 0), (2, 0), (4, 0), (6, 0), (8, 0)])
+        self.assertEqual(interpreter.interpreter_get_coords(), (8, 0))
 
     def test_run_at_least_once(self):
         interpreter = interpreter_file.Interpreter()
@@ -52,38 +50,31 @@ class TestInterpreter(unittest.TestCase):
         interpreter = interpreter_file.Interpreter()
         result = interpreter.execute("test_programs/test_ifblocks1.txt")
 
-        self.assertEqual(result, [(0, 0), (2, 0), (2, 2), (2, 6)])
+        self.assertEqual(result, [(0, 0)])
 
     def test_ifblocks2(self):
         interpreter = interpreter_file.Interpreter()
         result = interpreter.execute("test_programs/test_ifblocks2.txt")
 
-        self.assertEqual(result, [(0, 0), (0, 4), (2, 4), (2, 20), (6, 20), (20, 20)])
+        self.assertEqual(result, [(0, 0), (2, 0), (2, 8)])
 
     def test_for_reglament_1(self):
         interpreter = interpreter_file.Interpreter()
-        result = interpreter.execute("programs_4_reglament/1.txt")
-
-        self.assertEqual(result, [(0, 0), (5, 0), (10, 0), (15, 0), (15, 10), (13, 10), (13, 12)])
-
-    def test_for_reglament_2(self):
-        interpreter = interpreter_file.Interpreter()
 
         try:
-            interpreter.execute("programs_4_reglament/2.txt")
+            interpreter.execute("programs_4_reglament/1.txt")
 
         except errors.GridOutOfBounceError as error:
             self.assertEqual(error.get_message(), "GridOutOfBounceError: "
                                                   "Invalid direction. It must be between 0 and 20. "
-                                                  "You can't move right 2 times. Your previous position: (20, 0)")
+                                                  "You can't move left 2 times. Your previous position: (0, 10)")
 
-    def test_for_reglament_2_correct(self):
+    def test_for_reglament_2(self):
         interpreter = interpreter_file.Interpreter()
-        result = interpreter.execute("programs_4_reglament/2_correct.txt")
 
-        self.assertEqual(result,
-                         [(0, 0), (2, 0), (4, 0), (6, 0), (8, 0), (10, 0),
-                          (12, 0), (14, 0), (16, 0), (18, 0), (20, 0)])
+        result = interpreter.execute("programs_4_reglament/2.txt")
+
+        self.assertEqual(result, [(0, 0)])
 
     def test_for_reglament_5_a(self):
         interpreter = interpreter_file.Interpreter()

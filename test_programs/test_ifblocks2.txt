@@ -1,26 +1,6 @@
 IFBLOCK LEFT
-
-    LEFT 10
-    UP 2
-    SET X = 4
-
-ENDIF
-
-IFBLOCK RIGHT
-
-    UP X
     RIGHT 2
-
-    IFBLOCK UP
-        UP 16
-        RIGHT 4
-        IFBLOCK UP
-            UP 2
-            RIGHT 5
-        ENDIF
-
-        IFBLOCK RIGHT
-            RIGHT 14
-        ENDIF
+    IFBLOCK DOWN
+        UP 8
     ENDIF
 ENDIF
