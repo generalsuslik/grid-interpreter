@@ -99,6 +99,48 @@ QPushButton:pressed  {
            </widget>
           </item>
           <item>
+           <widget class="QPushButton" name="pushButton">
+            <property name="minimumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+	border-radius: 4px;
+	background: rgb(50, 50, 50);
+}
+
+QPushButton:hover {
+	border-radius: 4px;
+	background: rgb(60, 60, 60);
+}
+
+QPushButton:pressed  {
+	border-radius: 4px;
+	background: rgb(77, 77, 77);
+}</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset>
+              <normaloff>assets/run-animated-icon.png</normaloff>assets/run-animated-icon.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>32</width>
+              <height>32</height>
+             </size>
+            </property>
+            <property name="flat">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QPushButton" name="open_file_btn">
             <property name="minimumSize">
              <size>

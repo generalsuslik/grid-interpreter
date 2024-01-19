@@ -1,9 +1,10 @@
 import logging
+import threading
 import time
 
 from PyQt5 import QtWidgets, uic
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QColor
+from PyQt5.QtCore import QObject, QThread, Qt, pyqtSignal
+from PyQt5.QtGui import QColor, QIcon
 
 from .editor import Editor
 from .field import Field
@@ -20,12 +21,87 @@ class OpenHelper:
         self.s.open_file(event=event, filename=self.fname)
 
 
+class Worker(QObject):
+    finished = pyqtSignal()
+
+    def __init__(self, interpreter, parent=None):
+        super().__init__()
+        self.interpreter = interpreter
+        self.parent = parent
+        self.stop_img = QIcon("./ui/assets/stop-icon.png")
+        self.run_img = QIcon("./ui/assets/run-icon.png")
+        self.force_stop = False
+
+    def run(self):
+        self.force_stop = False
+        self.interpreter.force_stop = False
+        self.parent.run_btn.setStyleSheet("""
+            QPushButton {
+                border-radius: 4px;
+                background: rgb(170, 60, 60);
+            }
+
+            QPushButton:hover {
+                border-radius: 4px;
+                background: rgb(180, 70, 70);
+            }
+
+            QPushButton:pressed  {
+                border-radius: 4px;
+                background: rgb(190, 77, 77);
+            }
+        """)
+        self.parent.run_btn.setIcon(self.stop_img)
+        try:
+            self.parent.way = self.interpreter.execute(self.parent.filename)
+            if not self.force_stop:
+                result_x, result_y = self.parent.way[-1][0], self.parent.way[-1][1]
+                self.parent.cords.setText(f"X: {result_x}\n Y: {result_y}")
+                self.parent.log(self.parent.way)
+        except Exception as ex:
+            self.parent.cords.setText("X: ---\nY: ---")
+            self.parent.way = []
+            self.parent.log(ex, level=logging.ERROR)
+        if not self.force_stop:
+            self.parent.preview.update(self.parent.way)
+        self.repaint_btn_back()
+        self.finished.emit()
+
+    def repaint_btn_back(self):
+        self.parent.run_btn.setStyleSheet("""
+                    QPushButton {
+                        border-radius: 4px;
+                        background: rgb(50, 50, 50);
+                    }
+
+                    QPushButton:hover {
+                        border-radius: 4px;
+                        background: rgb(60, 60, 60);
+                    }
+
+                    QPushButton:pressed  {
+                        border-radius: 4px;
+                        background: rgb(77, 77, 77);
+                    }
+                """)
+        self.parent.run_btn.setIcon(self.run_img)
+
+    def stop_it(self):
+        try:
+            self.force_stop = True
+            self.interpreter.force_stop = True
+
+        except Exception as ex:
+            print(ex)
+
+
 class Ui(QtWidgets.QMainWindow):
     def __init__(self, interpreter, db_manager, logger):
         super(Ui, self).__init__()
         self.db = db_manager
         self.logger = logger
         self.interpreter = interpreter
+
         # load settings
         self.config = self.db.get_settings()
         self.save_on_close = self.config.get("save_on_exit", "1") == "1"
@@ -38,6 +114,7 @@ class Ui(QtWidgets.QMainWindow):
 
         # lets build UI
         uic.loadUi("./ui/main.ui", self)
+        self.setWindowTitle("Grid Master")
         self.open_file_btn.clicked.connect(self.open_file)
         self.new_file_btn.clicked.connect(self.create_file)
         self.save_file_btn.clicked.connect(self.save_file)
@@ -60,6 +137,14 @@ class Ui(QtWidgets.QMainWindow):
         self.generate_recent()
         self.show()
         self.preview.update()
+
+        # set up multithreading
+        self.thread = QThread()
+        self.worker = Worker(self.interpreter, self)
+        self.worker.moveToThread(self.thread)
+        self.thread.started.connect(self.worker.run)
+        self.worker.finished.connect(self.thread.quit)
+
         self.log("Ida started up")
         self.log("We're ready to go")
 
@@ -126,16 +211,10 @@ class Ui(QtWidgets.QMainWindow):
 
     def execute_code(self, event=None):
         self.save_file(None)
-        try:
-            self.way = self.interpreter.execute(self.filename)
-            result_x, result_y = self.way[-1][0], self.way[-1][1]
-            self.cords.setText(f"X: {result_x}\n Y: {result_y}")
-            self.log(self.way)
-        except Exception as ex:
-            self.cords.setText("X: ---\nY: ---")
-            self.way = None
-            self.log(ex, level=logging.ERROR)
-        self.preview.update(self.way)
+        if self.thread.isRunning():
+            self.worker.stop_it()
+        else:
+            self.thread.start()
 
     def log(self, text, level=logging.INFO):
         self.logger.log(

@@ -15,6 +15,7 @@ class Interpreter:
 
     def __init__(self):
         self.grid = None
+        self.force_stop = False
         self.commands = []
         self.executable_commands = []
         self.final_executable_commands = []
@@ -28,6 +29,8 @@ class Interpreter:
     def get_variables(self):
         index = 0
         while index < len(self.commands):
+            if self.force_stop:
+                return 0
             command = self.commands[index]
             command_split = command.split()
             if command_split[0] == "SET":
@@ -61,6 +64,8 @@ class Interpreter:
     def get_procedures(self):
         index = 0
         while index < len(self.commands):
+            if self.force_stop:
+                return 0
             command_split = self.commands[index].split()
             if command_split[0] == "PROCEDURE":
                 procedure_name = command_split[1]
@@ -175,6 +180,8 @@ class Interpreter:
         self.check_repeat_loops(commands_array)
 
         while index < len(commands_array):
+            if self.force_stop:
+                return 0
             command = commands_array[index]
             split_command = command.split()
             # ########################LOOPS##############################
@@ -517,6 +524,8 @@ class Interpreter:
                 "Your repeat cycle is not closed"
             )
         while index < len(self.executable_commands):
+            if self.force_stop:
+                return 0
             command = self.executable_commands[index]
             split_command = command.split()
             # ########################LOOPS##############################
@@ -764,6 +773,8 @@ class Interpreter:
         index = 0
         self.check_ifblocks()
         while index < len(self.final_executable_commands):
+            if self.force_stop:
+                return 0
             command = self.final_executable_commands[index]
             command_split = command.split()
             if command_split[0] in ["UP", "DOWN", "RIGHT", "LEFT"]:
@@ -5768,12 +5779,16 @@ class Interpreter:
         self.grid = grid.Grid(start_x=0, start_y=0)
         self.load_file(program_file)
         self.check_commands()
-        self.get_variables()
-        self.get_procedures()
-        self.first_parse(self.commands)
-        self.second_parse()
-        self.run_commands()
-
+        if not self.force_stop:
+            self.get_variables()
+        if not self.force_stop:
+            self.get_procedures()
+        if not self.force_stop:
+            self.first_parse(self.commands)
+        if not self.force_stop:
+            self.second_parse()
+        if not self.force_stop:
+            self.run_commands()
         return self.coordinates
 
     def load_file(self, program_file: str) -> None:

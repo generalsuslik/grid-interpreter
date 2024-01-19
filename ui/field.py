@@ -20,9 +20,9 @@ class Field(QLabel):
         self.setMinimumSize(self.size, self.size)
         self.parent.preview_layout.update()
         self.way = way
-        self.render()
+        self.render_field()
 
-    def render(self):
+    def render_field(self):
         canvas = QPixmap(self.size, self.size)
         canvas.fill(QColor(44, 44, 88))
         painter = QPainter(canvas)
@@ -33,6 +33,8 @@ class Field(QLabel):
         if self.way:
             painter.setPen(QPen(QColor(111, 180, 111), 3))
             for i in range(len(self.way) - 1):
+                if self.parent.worker.force_stop:
+                    break
                 x_start = int(self.way[i][0] * step)
                 y_start = int(self.way[i][1] * step)
                 x_end = int(self.way[i + 1][0] * step)
