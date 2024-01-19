@@ -5,7 +5,7 @@ from interpreter import errors, grid
 
 class Interpreter:
     """
-    Class represents simple interpreter. When u ran the execute() method,
+    Class represents simple interpreter. When u run the execute() method,
     the interpreter declares all variables and procedures with get_variables()
     and get_procedures() methods respectively. Then interpreter runs 2
     parse methods,
@@ -21,8 +21,7 @@ class Interpreter:
         self.functions = defaultdict(list)
         self.variables = {}
         self.coordinates = [(0, 0)]
-        self.allowed_commands = ["RIGHT", "LEFT", "UP", "DOWN", "REPEAT",
-                                 "ENDREPEAT", "IFBLOCK", "ENDIF",
+        self.allowed_commands = ["RIGHT", "LEFT", "UP", "DOWN", "REPEAT", "ENDREPEAT", "IFBLOCK", "ENDIF",
                                  "PROCEDURE", "ENDPROC", "SET"]
 
     # Variables declaration
@@ -691,11 +690,30 @@ class Interpreter:
 
             index += 1
 
-    def process_ifblocks(self, index: int):
-        pass
+    def check_ifblocks(self):
+        count_if_blocks = 0
+        count_endif_blocks = 0
+
+        for command in self.final_executable_commands:
+            if command.startswith("IFBLOCK"):
+                count_if_blocks += 1
+
+            if command == "ENDIF":
+                count_endif_blocks += 1
+
+        if count_if_blocks > count_endif_blocks:
+            raise errors.IFBlockNotClosedError(
+                f"{count_if_blocks - count_endif_blocks} of your ifblocks are not closed"
+            )
+
+        if count_if_blocks < count_endif_blocks:
+            raise errors.WrongSyntaxCommandError(
+                "You have wrong syntax with endif"
+            )
 
     def run_commands(self) -> None:
         index = 0
+        self.check_ifblocks()
         while index < len(self.final_executable_commands):
             command = self.final_executable_commands[index]
             command_split = command.split()
@@ -721,6 +739,11 @@ class Interpreter:
                         )
 
                     times_to_move = int(check_time_to_move)
+
+                    if times_to_move <= 0:
+                        raise errors.WrongSyntaxCommandError(
+                            f"You can't move {command_split[0]} {times_to_move} times"
+                        )
 
                     self.grid.move(command_split[0], times_to_move)
                     self.coordinates.append(self.grid.get_coords())
@@ -1200,8 +1223,7 @@ class Interpreter:
                                                         index += 1
                                                         continue
 
-                                                elif command3_split[0] in ["IFBLOCK", "CALL",
-                                                                           "REPEAT"]:
+                                                elif command3_split[0] in ["IFBLOCK", "CALL", "REPEAT"]:
                                                     raise errors.Increasing3NestedCallsError(
                                                         "You've increased 3 nested "
                                                         "calls rule"
@@ -1220,8 +1242,7 @@ class Interpreter:
                                                 command3 = self.final_executable_commands[index]
                                                 command3_split = command3.split()
 
-                                                if command3_split[0] in ["UP", "DOWN",
-                                                                         "LEFT", "RIGHT"]:
+                                                if command3_split[0] in ["UP", "DOWN", "LEFT", "RIGHT"]:
                                                     times_to_move3 = command3_split[1]
                                                     check_times_to_move3 = None
 
@@ -1262,8 +1283,7 @@ class Interpreter:
                                                         index += 1
                                                         continue
 
-                                                elif command3_split[0] in ["IFBLOCK", "CALL",
-                                                                           "REPEAT"]:
+                                                elif command3_split[0] in ["IFBLOCK", "CALL", "REPEAT"]:
                                                     raise errors.Increasing3NestedCallsError(
                                                         "You've increased 3 nested "
                                                         "calls rule"
@@ -1282,8 +1302,7 @@ class Interpreter:
                                                 command3 = self.final_executable_commands[index]
                                                 command3_split = command3.split()
 
-                                                if command3_split[0] in ["UP", "DOWN",
-                                                                         "LEFT", "RIGHT"]:
+                                                if command3_split[0] in ["UP", "DOWN", "LEFT", "RIGHT"]:
                                                     times_to_move3 = command3_split[1]
                                                     check_times_to_move3 = None
 
@@ -1322,8 +1341,7 @@ class Interpreter:
                                                         index += 1
                                                         continue
 
-                                                elif command3_split[0] in ["IFBLOCK", "CALL",
-                                                                           "REPEAT"]:
+                                                elif command3_split[0] in ["IFBLOCK", "CALL", "REPEAT"]:
                                                     raise errors.Increasing3NestedCallsError(
                                                         "You've increased 3 nested "
                                                         "calls rule"
@@ -1342,8 +1360,7 @@ class Interpreter:
                                                 command3 = self.final_executable_commands[index]
                                                 command3_split = command3.split()
 
-                                                if command3_split[0] in ["UP", "DOWN",
-                                                                         "LEFT", "RIGHT"]:
+                                                if command3_split[0] in ["UP", "DOWN", "LEFT", "RIGHT"]:
                                                     times_to_move3 = command3_split[1]
                                                     check_times_to_move3 = None
 
@@ -1497,8 +1514,7 @@ class Interpreter:
                                                         index += 1
                                                         continue
 
-                                                elif command3_split[0] in ["IFBLOCK", "CALL",
-                                                                           "REPEAT"]:
+                                                elif command3_split[0] in ["IFBLOCK", "CALL", "REPEAT"]:
                                                     raise errors.Increasing3NestedCallsError(
                                                         "You've increased 3 nested "
                                                         "calls rule"
@@ -1517,8 +1533,7 @@ class Interpreter:
                                                 command3 = self.final_executable_commands[index]
                                                 command3_split = command3.split()
 
-                                                if command3_split[0] in ["UP", "DOWN",
-                                                                         "LEFT", "RIGHT"]:
+                                                if command3_split[0] in ["UP", "DOWN", "LEFT", "RIGHT"]:
                                                     times_to_move3 = command3_split[1]
                                                     check_times_to_move3 = None
 
@@ -1559,8 +1574,7 @@ class Interpreter:
                                                         index += 1
                                                         continue
 
-                                                elif command3_split[0] in ["REPEAT", "CALL",
-                                                                           "IFBLOCK"]:
+                                                elif command3_split[0] in ["REPEAT", "CALL", "IFBLOCK"]:
                                                     raise errors.Increasing3NestedCallsError(
                                                         "You've increased 3 nested "
                                                         "calls rule"
@@ -1579,8 +1593,7 @@ class Interpreter:
                                                 command3 = self.final_executable_commands[index]
                                                 command3_split = command3.split()
 
-                                                if command3_split[0] in ["UP", "DOWN",
-                                                                         "LEFT", "RIGHT"]:
+                                                if command3_split[0] in ["UP", "DOWN", "LEFT", "RIGHT"]:
                                                     times_to_move3 = command3_split[1]
                                                     check_times_to_move3 = None
 
@@ -1617,8 +1630,7 @@ class Interpreter:
                                                         index += 1
                                                         continue
 
-                                                elif command3_split[0] in ["REPEAT", "CALL",
-                                                                           "IFBLOCK"]:
+                                                elif command3_split[0] in ["REPEAT", "CALL", "IFBLOCK"]:
                                                     raise errors.Increasing3NestedCallsError(
                                                         "You've increased 3 nested "
                                                         "calls rule"
@@ -1637,8 +1649,7 @@ class Interpreter:
                                                 command3 = self.final_executable_commands[index]
                                                 command3_split = command3.split()
 
-                                                if command3_split[0] in ["UP", "DOWN",
-                                                                         "LEFT", "RIGHT"]:
+                                                if command3_split[0] in ["UP", "DOWN", "LEFT", "RIGHT"]:
                                                     times_to_move3 = command3_split[1]
                                                     check_times_to_move3 = None
 
@@ -1675,8 +1686,7 @@ class Interpreter:
                                                         index += 1
                                                         continue
 
-                                                elif command3_split[0] in ["REPEAT", "CALL",
-                                                                           "IFBLOCK"]:
+                                                elif command3_split[0] in ["REPEAT", "CALL", "IFBLOCK"]:
                                                     raise errors.Increasing3NestedCallsError(
                                                         "You've increased 3 nested "
                                                         "calls rule"
@@ -1854,8 +1864,7 @@ class Interpreter:
                                                         index += 1
                                                         continue
 
-                                                elif command3_split[0] in ["REPEAT", "CALL",
-                                                                           "IFBLOCK"]:
+                                                elif command3_split[0] in ["REPEAT", "CALL", "IFBLOCK"]:
                                                     raise errors.Increasing3NestedCallsError(
                                                         "You've increased 3 nested "
                                                         "calls rule"
@@ -1932,8 +1941,7 @@ class Interpreter:
                                                 command3 = self.final_executable_commands[index]
                                                 command3_split = command3.split()
 
-                                                if command3_split[0] in ["UP", "DOWN",
-                                                                         "LEFT", "RIGHT"]:
+                                                if command3_split[0] in ["UP", "DOWN", "LEFT", "RIGHT"]:
                                                     times_to_move3 = command3_split[1]
                                                     check_times_to_move3 = None
 
@@ -1976,8 +1984,6 @@ class Interpreter:
                                                         "You've increased 3 nested "
                                                         "calls rule"
                                                     )
-
-                        # index += 1
 
                 #  continuing first ifblock down
                 # ###############################################################################1
@@ -2106,8 +2112,7 @@ class Interpreter:
                                                 command3 = self.final_executable_commands[index]
                                                 command3_split = command3.split()
 
-                                                if command3_split[0] in ["UP", "DOWN",
-                                                                         "LEFT", "RIGHT"]:
+                                                if command3_split[0] in ["UP", "DOWN", "LEFT", "RIGHT"]:
                                                     times_to_move3 = command3_split[1]
                                                     check_times_to_move3 = None
 
@@ -2144,8 +2149,7 @@ class Interpreter:
                                                         index += 1
                                                         continue
 
-                                                elif command3_split[0] in ["REPEAT", "CALL",
-                                                                           "IFBLOCK"]:
+                                                elif command3_split[0] in ["REPEAT", "CALL", "IFBLOCK"]:
                                                     raise errors.Increasing3NestedCallsError(
                                                         "You've increased 3 nested "
                                                         "calls rule"
@@ -2164,8 +2168,7 @@ class Interpreter:
                                                 command3 = self.final_executable_commands[index]
                                                 command3_split = command3.split()
 
-                                                if command3_split[0] in ["UP", "DOWN",
-                                                                         "LEFT", "RIGHT"]:
+                                                if command3_split[0] in ["UP", "DOWN", "LEFT", "RIGHT"]:
                                                     times_to_move3 = command3_split[1]
                                                     check_times_to_move3 = None
 
@@ -2264,8 +2267,7 @@ class Interpreter:
                                                         index += 1
                                                         continue
 
-                                                elif command3_split[0] in ["REPEAT", "CALL",
-                                                                           "IFBLOCK"]:
+                                                elif command3_split[0] in ["REPEAT", "CALL", "IFBLOCK"]:
                                                     raise errors.Increasing3NestedCallsError(
                                                         "You've increased 3 nested "
                                                         "calls rule"
@@ -2284,8 +2286,7 @@ class Interpreter:
                                                 command3 = self.final_executable_commands[index]
                                                 command3_split = command3.split()
 
-                                                if command3_split[0] in ["UP", "DOWN",
-                                                                         "LEFT", "RIGHT"]:
+                                                if command3_split[0] in ["UP", "DOWN", "LEFT", "RIGHT"]:
                                                     times_to_move3 = command3_split[1]
                                                     check_times_to_move3 = None
 
@@ -2322,8 +2323,7 @@ class Interpreter:
                                                         index += 1
                                                         continue
 
-                                                elif command3_split[0] in ["REPEAT", "CALL",
-                                                                           "IFBLOCK"]:
+                                                elif command3_split[0] in ["REPEAT", "CALL", "IFBLOCK"]:
                                                     raise errors.Increasing3NestedCallsError(
                                                         "You've increased 3 nested "
                                                         "calls rule"
@@ -2401,8 +2401,7 @@ class Interpreter:
                                                 command3 = self.final_executable_commands[index]
                                                 command3_split = command3.split()
 
-                                                if command3_split[0] in ["UP", "DOWN",
-                                                                         "LEFT", "RIGHT"]:
+                                                if command3_split[0] in ["UP", "DOWN", "LEFT", "RIGHT"]:
                                                     times_to_move3 = command3_split[1]
                                                     check_times_to_move3 = None
 
@@ -2439,8 +2438,7 @@ class Interpreter:
                                                         index += 1
                                                         continue
 
-                                                elif command3_split[0] in ["REPEAT", "CALL",
-                                                                           "IFBLOCK"]:
+                                                elif command3_split[0] in ["REPEAT", "CALL", "IFBLOCK"]:
                                                     raise errors.Increasing3NestedCallsError(
                                                         "You've increased 3 nested "
                                                         "calls rule"
@@ -2459,8 +2457,7 @@ class Interpreter:
                                                 command3 = self.final_executable_commands[index]
                                                 command3_split = command3.split()
 
-                                                if command3_split[0] in ["UP", "DOWN",
-                                                                         "LEFT", "RIGHT"]:
+                                                if command3_split[0] in ["UP", "DOWN", "LEFT", "RIGHT"]:
                                                     times_to_move3 = command3_split[1]
                                                     check_times_to_move3 = None
 
@@ -2501,8 +2498,7 @@ class Interpreter:
                                                         index += 1
                                                         continue
 
-                                                elif command3_split[0] in ["REPEAT", "CALL",
-                                                                           "IFBLOCK"]:
+                                                elif command3_split[0] in ["REPEAT", "CALL", "IFBLOCK"]:
                                                     raise errors.Increasing3NestedCallsError(
                                                         "You've increased 3 nested "
                                                         "calls rule"
@@ -2521,8 +2517,7 @@ class Interpreter:
                                                 command3 = self.final_executable_commands[index]
                                                 command3_split = command3.split()
 
-                                                if command3_split[0] in ["UP", "DOWN",
-                                                                         "LEFT", "RIGHT"]:
+                                                if command3_split[0] in ["UP", "DOWN", "LEFT", "RIGHT"]:
                                                     times_to_move3 = command3_split[1]
                                                     check_times_to_move3 = None
 
@@ -2761,8 +2756,7 @@ class Interpreter:
                                                 command3 = self.final_executable_commands[index]
                                                 command3_split = command3.split()
 
-                                                if command3_split[0] in ["UP", "DOWN",
-                                                                         "LEFT", "RIGHT"]:
+                                                if command3_split[0] in ["UP", "DOWN", "LEFT", "RIGHT"]:
                                                     times_to_move3 = command3_split[1]
                                                     check_times_to_move3 = None
 
@@ -3225,7 +3219,6 @@ class Interpreter:
                                                         "You've increased 3 nested "
                                                         "calls rule"
                                                     )
-                        # index += 1
 
                 # continuing first ifblock right
                 if block_direction == "RIGHT":
@@ -4464,7 +4457,6 @@ class Interpreter:
                                                         "You've increased 3 nested "
                                                         "calls rule"
                                                     )
-                        # index += 1
 
                 # continuing first ifblock left
                 if block_direction == "LEFT":
@@ -5711,7 +5703,6 @@ class Interpreter:
                                                         "You've increased 3 nested "
                                                         "calls rule"
                                                     )
-                        # index += 1
 
             index += 1
 
@@ -5753,7 +5744,7 @@ class Interpreter:
         except Exception:
             raise errors.FileReadingError("Error during reading your file")
 
-    def get_cords(self):
+    def interpreter_get_coords(self):
         if self.grid:
             return self.grid.get_coords()
         raise errors.ExecuteAtLeastOnce("You have to execute your program at least once")
@@ -5764,5 +5755,5 @@ class Interpreter:
 
 if __name__ == "__main__":
     program = Interpreter()
-    res = program.execute("../test_programs/test_ifblocks3.txt")
+    res = program.execute("../test_programs/test_ifblocks1.txt")
     print(res)

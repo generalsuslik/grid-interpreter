@@ -107,7 +107,7 @@ class Ui(QtWidgets.QMainWindow):
             self.generate_recent()
             self.code_field.lexer.styleText(0, len(code))
         else:
-            self.log("You didn't selected file")
+            self.log("You didn't select file")
 
     def create_file(self, event=None):
         self.filename = ""
