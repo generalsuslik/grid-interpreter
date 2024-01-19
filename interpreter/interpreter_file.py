@@ -74,7 +74,19 @@ class Interpreter:
 
                 try:
                     while self.commands[index] != "ENDPROC":
-                        procedure_body.append(self.commands[index])
+                        if not self.commands[index].startswith("CALL"):
+                            procedure_body.append(self.commands[index])
+
+                        else:
+                            called_procedure = self.functions.get(self.commands[index].split()[1])
+                            if called_procedure is None:
+                                raise errors.ProcedureNotDeclaredError(
+                                    f"Procedure {self.commands[index].split()[1]} was not declared"
+                                )
+
+                            for procedure_command in called_procedure:
+                                procedure_body.append(procedure_command)
+
                         index += 1
 
                 except IndexError:
@@ -140,8 +152,8 @@ class Interpreter:
                 "It must be like: REPEAT <X>"
             )
 
-    def first_parse(self, commands_array) -> None | errors.Error:
-        index = 0
+    @staticmethod
+    def check_repeat_loops(commands_array):
         # Check if there is a not closed or not opened repeat cycle error
         count_repeat = 0
         count_endrepeat = 0
@@ -157,6 +169,10 @@ class Interpreter:
             raise errors.RepeatNotClosedError(
                 "Your repeat cycle is not closed"
             )
+
+    def first_parse(self, commands_array) -> None | errors.Error:
+        index = 0
+        self.check_repeat_loops(commands_array)
 
         while index < len(commands_array):
             command = commands_array[index]
@@ -301,7 +317,7 @@ class Interpreter:
                                 index += 1
                                 while commands_array[index] != "ENDREPEAT":
                                     if (
-                                            self.executable_commands[index].split()[0] in
+                                            commands_array[index].split()[0] in
                                             ["REPEAT", "CALL", "IFBLOCK"]
                                     ):
                                         raise (
@@ -325,7 +341,18 @@ class Interpreter:
                                 # n3 times to 2nd loop's body
                                 for _ in range(n3):
                                     for elem in cycle_body3:
-                                        cycle_body2.append(elem)
+                                        if not elem.startswith("CALL"):
+                                            cycle_body2.append(elem)
+
+                                        else:
+                                            procedure3 = self.functions.get(elem.split()[1])
+                                            if procedure3 is None:
+                                                raise errors.ProcedureNotDeclaredError(
+                                                    f"No such procedure {elem.split()[1]}"
+                                                )
+
+                                            for procedure_command3 in procedure3:
+                                                cycle_body2.append(procedure_command3)
                                 # 3 nest done
                             # ---------------------------------------------#
                             # continuing 2 nest
@@ -345,7 +372,18 @@ class Interpreter:
                         # add elements from cycle2 n2 times to cycle1
                         for _ in range(n2):
                             for elem in cycle_body2:
-                                cycle_body1.append(elem)
+                                if not elem.startswith("CALL"):
+                                    cycle_body1.append(elem)
+
+                                else:
+                                    procedure2 = self.functions.get(elem.split()[1])
+                                    if procedure2 is None:
+                                        raise errors.ProcedureNotDeclaredError(
+                                            f"No such procedure {elem.split()[1]}"
+                                        )
+
+                                    for procedure_command2 in procedure2:
+                                        cycle_body1.append(procedure_command2)
 
                     #####################################################
                     # continuing 1st nest
@@ -362,7 +400,18 @@ class Interpreter:
                 index += 1  # escaping from "ENDREPEAT" in 1st loop
                 for _ in range(n1):
                     for elem in cycle_body1:
-                        self.executable_commands.append(elem)
+                        if not elem.startswith("CALL"):
+                            self.executable_commands.append(elem)
+
+                        else:
+                            procedure = self.functions.get(elem.split()[1])
+                            if procedure is None:
+                                raise errors.ProcedureNotDeclaredError(
+                                    f"No procedure {elem.split()[1]}"
+                                )
+
+                            for procedure_command in procedure:
+                                self.executable_commands.append(procedure_command)
 
                 continue
 
@@ -5755,5 +5804,5 @@ class Interpreter:
 
 if __name__ == "__main__":
     program = Interpreter()
-    res = program.execute("../test_programs/test_ifblocks1.txt")
+    res = program.execute("../test_programs/program_check.txt")
     print(res)

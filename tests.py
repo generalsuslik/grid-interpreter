@@ -30,10 +30,9 @@ class TestInterpreter(unittest.TestCase):
         try:
             interpreter.execute("test_programs/3nested_proc.txt")
 
-        except errors.Increasing3NestedCallsError as error:
+        except errors.ProcedureNotDeclaredError as error:
             self.assertEqual(error.message,
-                             "Increasing3NestedCallsError: "
-                             "You've increased 3 nested calls rule")
+                             "ProcedureNotDeclaredError: Procedure D was not declared")
 
     def test_program2(self):
         interpreter = interpreter_file.Interpreter()
