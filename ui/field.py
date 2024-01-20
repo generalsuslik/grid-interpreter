@@ -17,6 +17,11 @@ class Field(QLabel):
             self.parent.preview_layout.geometry().width(),
             self.parent.preview_layout.geometry().height()
         ) * 0.96)
+        while self.size == 0 and self.parent.isVisible():
+            self.size = int(min(
+                self.parent.preview_layout.geometry().width(),
+                self.parent.preview_layout.geometry().height()
+            ) * 0.96)
         self.setMinimumSize(self.size, self.size)
         self.parent.preview_layout.update()
         self.way = way
