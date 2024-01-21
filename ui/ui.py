@@ -1,11 +1,11 @@
 import logging
-import threading
 import time
 
 from PyQt5 import QtWidgets, uic
-from PyQt5.QtCore import QObject, QThread, Qt, pyqtSignal
-from PyQt5.QtGui import QColor, QIcon
+from PyQt5.QtCore import QThread, Qt
+from PyQt5.QtGui import QColor
 
+from .code_executor import Worker
 from .editor import Editor
 from .field import Field
 from .settings import Settings
@@ -19,80 +19,6 @@ class OpenHelper:
 
     def __call__(self, event):
         self.s.open_file(event=event, filename=self.fname)
-
-
-class Worker(QObject):
-    finished = pyqtSignal()
-
-    def __init__(self, interpreter, parent=None):
-        super().__init__()
-        self.interpreter = interpreter
-        self.parent = parent
-        self.stop_img = QIcon("./ui/assets/stop-icon.png")
-        self.run_img = QIcon("./ui/assets/run-icon.png")
-        self.force_stop = False
-
-    def run(self):
-        self.force_stop = False
-        self.interpreter.force_stop = False
-        self.parent.run_btn.setStyleSheet("""
-            QPushButton {
-                border-radius: 4px;
-                background: rgb(170, 60, 60);
-            }
-
-            QPushButton:hover {
-                border-radius: 4px;
-                background: rgb(180, 70, 70);
-            }
-
-            QPushButton:pressed  {
-                border-radius: 4px;
-                background: rgb(190, 77, 77);
-            }
-        """)
-        self.parent.run_btn.setIcon(self.stop_img)
-        try:
-            self.parent.way = self.interpreter.execute(self.parent.filename)
-            if not self.force_stop:
-                result_x, result_y = self.parent.way[-1][0], self.parent.way[-1][1]
-                self.parent.cords.setText(f"X: {result_x}\n Y: {result_y}")
-                self.parent.log(self.parent.way)
-        except Exception as ex:
-            self.parent.cords.setText("X: ---\nY: ---")
-            self.parent.way = []
-            self.parent.log(ex, level=logging.ERROR)
-        if not self.force_stop:
-            self.parent.preview.update(self.parent.way)
-        self.repaint_btn_back()
-        self.finished.emit()
-
-    def repaint_btn_back(self):
-        self.parent.run_btn.setStyleSheet("""
-                    QPushButton {
-                        border-radius: 4px;
-                        background: rgb(50, 50, 50);
-                    }
-
-                    QPushButton:hover {
-                        border-radius: 4px;
-                        background: rgb(60, 60, 60);
-                    }
-
-                    QPushButton:pressed  {
-                        border-radius: 4px;
-                        background: rgb(77, 77, 77);
-                    }
-                """)
-        self.parent.run_btn.setIcon(self.run_img)
-
-    def stop_it(self):
-        try:
-            self.force_stop = True
-            self.interpreter.force_stop = True
-
-        except Exception as ex:
-            print(ex)
 
 
 class Ui(QtWidgets.QMainWindow):
@@ -120,6 +46,7 @@ class Ui(QtWidgets.QMainWindow):
         self.save_file_btn.clicked.connect(self.save_file)
         self.settings_btn.clicked.connect(self.open_settings)
         self.run_btn.clicked.connect(self.execute_code)
+        self.run_slowly_btn.clicked.connect(self.execute_code_n_animate)
         self.code_field = Editor(self)
         self.code_layout.addWidget(self.code_field)
         self.default_log_style = self.logs.currentCharFormat()
@@ -135,8 +62,6 @@ class Ui(QtWidgets.QMainWindow):
         self.way = None
         self.recent_layout.setAlignment(Qt.AlignTop)
         self.generate_recent()
-        self.show()
-        self.preview.update()
 
         # set up multithreading
         self.thread = QThread()
@@ -145,6 +70,8 @@ class Ui(QtWidgets.QMainWindow):
         self.thread.started.connect(self.worker.run)
         self.worker.finished.connect(self.thread.quit)
 
+        self.show()
+        self.preview.update()
         self.log("Ida started up")
         self.log("We're ready to go")
 
@@ -214,6 +141,15 @@ class Ui(QtWidgets.QMainWindow):
         if self.thread.isRunning():
             self.worker.stop_it()
         else:
+            self.worker.animate = False
+            self.thread.start()
+
+    def execute_code_n_animate(self, event=None):
+        self.save_file(None)
+        if self.thread.isRunning():
+            self.worker.stop_it()
+        else:
+            self.worker.animate = True
             self.thread.start()
 
     def log(self, text, level=logging.INFO):
@@ -252,6 +188,8 @@ class Ui(QtWidgets.QMainWindow):
 
     def resizeEvent(self, event=None):
         super().resizeEvent(event)
+        if self.thread.isRunning() and self.worker.drawing:
+            self.worker.stop_it()
         self.preview.update(self.way)
 
     def closeEvent(self, event=None):

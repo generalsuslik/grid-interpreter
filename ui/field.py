@@ -1,3 +1,4 @@
+import time
 from datetime import datetime
 
 from PyQt5.QtGui import QColor, QPainter, QPen, QPixmap
@@ -12,7 +13,7 @@ class Field(QLabel):
         self.setStyleSheet("border: 4px solid; border-radius: 6px;")
         self.last_click = datetime.now()
 
-    def update(self, way=None):
+    def update(self, way=None, delay=0):
         self.size = int(min(
             self.parent.preview_layout.geometry().width(),
             self.parent.preview_layout.geometry().height()
@@ -25,9 +26,9 @@ class Field(QLabel):
         self.setMinimumSize(self.size, self.size)
         self.parent.preview_layout.update()
         self.way = way
-        self.render_field()
+        self.render_field(delay)
 
-    def render_field(self):
+    def render_field(self, delay=0):
         canvas = QPixmap(self.size, self.size)
         canvas.fill(QColor(44, 44, 88))
         painter = QPainter(canvas)
@@ -46,6 +47,22 @@ class Field(QLabel):
                 y_end = int(self.way[i + 1][1] * step)
                 y_start = self.size - y_start
                 y_end = self.size - y_end
+                tx_start = x_start
+                ty_start = y_start
+                cells_move = abs(
+                    self.way[i][0] - self.way[i + 1][0] + self.way[i + 1][0] - self.way[i + 1][1]
+                )
+                if delay:
+                    for k in range(cells_move):
+                        tx_end = (x_end - x_start) * k // cells_move + x_start
+                        ty_end = (y_end - y_start) * k // cells_move + y_start
+                        painter.drawLine(tx_start, ty_start, tx_end, ty_end)
+                        tx_start = tx_end
+                        ty_start = y_start
+                        if self.parent.worker.force_stop:
+                            break
+                        self.setPixmap(canvas)
+                        time.sleep(delay)
                 painter.drawLine(x_start, y_start, x_end, y_end)
         painter.end()
         self.setPixmap(canvas)

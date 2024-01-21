@@ -99,7 +99,7 @@ QPushButton:pressed  {
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton">
+           <widget class="QPushButton" name="run_slowly_btn">
             <property name="minimumSize">
              <size>
               <width>40</width>
