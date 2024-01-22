@@ -1,13 +1,7 @@
 IFBLOCK RIGHT
-
     IFBLOCK RIGHT
-
         IFBLOCK LEFT
-
             LEFT 2
-
         ENDIF
-
     ENDIF
-
 ENDIF

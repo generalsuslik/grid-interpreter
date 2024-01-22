@@ -5793,6 +5793,12 @@ class Interpreter:
 
     def load_file(self, program_file: str) -> None:
 
+        suffix = program_file.split(".")[-1]
+        if suffix != "txt":
+            raise errors.FileReadingError(
+                f"You can't open .{suffix} file. The only acceptable format is .txt"
+            )
+
         try:
             with open(program_file, "r") as check_file:
                 lines = check_file.read()
