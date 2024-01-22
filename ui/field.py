@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QLabel
 
 
 class Field(QLabel):
-    def __init__(self, parent, cell_num=21):
+    def __init__(self, parent, cell_num=20):
         super(Field, self).__init__()
         self.parent = parent
         self.cell_num = cell_num

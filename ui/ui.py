@@ -50,7 +50,7 @@ class Ui(QtWidgets.QMainWindow):
         self.code_field = Editor(self)
         self.code_layout.addWidget(self.code_field)
         self.default_log_style = self.logs.currentCharFormat()
-        self.preview = Field(self, 21)
+        self.preview = Field(self, 20)
         self.cords = QtWidgets.QLabel("X: 0\nY: 0")
         self.cords.setStyleSheet("font-size: 12pt; font-weight: 700;")
         self.cords.setAlignment(Qt.AlignCenter)
