@@ -1,1 +1,7 @@
-UP 2
+UP 20
+
+RIGHT 20
+
+DOWN 20
+
+LEFT 20

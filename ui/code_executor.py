@@ -32,8 +32,12 @@ class Worker(QObject):
             self.parent.log(ex, level=logging.ERROR)
         if not self.force_stop:
             self.drawing = True
-            if self.animate and len(self.parent.way) < 1000:
-                self.parent.preview.update(self.parent.way, 0.015)
+            if self.animate:
+                if len(self.parent.way) < 100:
+                    self.parent.preview.update(self.parent.way, 0.01)
+                else:
+                    self.parent.log("The way is too long to be animated")
+                    self.parent.preview.update(self.parent.way)
             else:
                 self.parent.preview.update(self.parent.way)
             self.drawing = False
