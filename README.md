@@ -24,5 +24,5 @@
     + Для Windows `.\.buildvenv\Scripts\activate`
     + Для Linux и MacOS `source ./.buildvenv/bin/activate`
 4. Устанавливаем зависимости `pip install -r prod_requirements.txt`
-5. Устанавливаем [Pyinstaller](https://pyinstaller.org/en/stable/) `pip install pyinstaller`
-6. Собираем исполняемый файл `pyinstaller main.py -D`
+5. Устанавливаем [Pyinstaller](https://pyinstaller.org/en/stable/) `pip install pyinstaller Pillow`
+6. Собираем исполняемый файл `pyinstaller main.py -w -F -n "Grid Master" -i .\ui\assets\logo_512.png --exclude-module Pillow`

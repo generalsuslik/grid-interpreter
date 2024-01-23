@@ -1,5 +1,7 @@
+import time
+
 from PyQt5 import QtWidgets, uic
-from PyQt5.QtCore import QPoint, Qt
+from PyQt5.QtCore import QPoint, QPropertyAnimation, Qt
 from PyQt5.QtGui import QFont
 
 
@@ -14,6 +16,12 @@ class Settings(QtWidgets.QMainWindow):
         self.setAttribute(Qt.WA_TranslucentBackground)
         uic.loadUi("./ui/settings.ui", self)
         self.close_btn.clicked.connect(self.close)
+        # setting up animation
+        self.fade_in_anim = QPropertyAnimation(self, b'windowOpacity')
+        self.fade_in_anim.setStartValue(0)
+        self.fade_in_anim.setEndValue(1)
+        self.fade_in_anim.setDuration(200)
+        self.setWindowOpacity(0)
         # set current settings
         try:
             self.settings = self.db.get_settings()
@@ -27,7 +35,7 @@ class Settings(QtWidgets.QMainWindow):
                 int(self.settings.get("font_size", 12))
             )
             font = QFont(
-                self.settings.get("font_name", "Times New Roman")
+                self.settings.get("font_name", "Cascadia Code")
             )
             self.font_select.setCurrentFont(font)
         except Exception as e:
@@ -38,6 +46,9 @@ class Settings(QtWidgets.QMainWindow):
             self.oldPos = event.globalPos()
         else:
             self.oldPos = None
+
+    def smooth_appearance(self):
+        self.fade_in_anim.start()
 
     def mouseMoveEvent(self, event):
         if self.oldPos:

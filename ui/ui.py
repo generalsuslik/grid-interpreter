@@ -3,7 +3,7 @@ import time
 
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtCore import QThread, Qt
-from PyQt5.QtGui import QColor
+from PyQt5.QtGui import QColor, QIcon
 
 from .code_executor import Worker
 from .editor import Editor
@@ -41,6 +41,7 @@ class Ui(QtWidgets.QMainWindow):
         # lets build UI
         uic.loadUi("./ui/main.ui", self)
         self.setWindowTitle("Grid Master")
+        self.setWindowIcon(QIcon("./ui/assets/logo_512.png"))
         self.open_file_btn.clicked.connect(self.open_file)
         self.new_file_btn.clicked.connect(self.create_file)
         self.save_file_btn.clicked.connect(self.save_file)
@@ -185,6 +186,7 @@ class Ui(QtWidgets.QMainWindow):
     def open_settings(self, event=None):
         self.settings_dialog = Settings(self.db, self)
         self.settings_dialog.show()
+        self.settings_dialog.smooth_appearance()
 
     def resizeEvent(self, event=None):
         super().resizeEvent(event)
