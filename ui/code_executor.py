@@ -1,7 +1,11 @@
 import logging
+import os
 
 from PyQt5.QtCore import QObject, pyqtSignal
 from PyQt5.QtGui import QIcon
+
+
+BASE_DIR = os.path.dirname(__file__)
 
 
 class Worker(QObject):
@@ -11,9 +15,9 @@ class Worker(QObject):
         super().__init__()
         self.interpreter = interpreter
         self.parent = parent
-        self.stop_img = QIcon("./ui/assets/stop-icon.png")
-        self.run_img = QIcon("./ui/assets/run-icon.png")
-        self.run_slow_img = QIcon("./ui/assets/run-animated-icon.png")
+        self.stop_img = QIcon(os.path.join(BASE_DIR, "./assets/stop-icon.png"))
+        self.run_img = QIcon(os.path.join(BASE_DIR, "./assets/run-icon.png"))
+        self.run_slow_img = QIcon(os.path.join(BASE_DIR, "./assets/run-animated-icon.png"))
         self.force_stop = False
         self.animate = False
         self.drawing = False

@@ -1,4 +1,5 @@
 import logging
+import os
 import time
 
 from PyQt5 import QtWidgets, uic
@@ -9,6 +10,9 @@ from .code_executor import Worker
 from .editor import Editor
 from .field import Field
 from .settings import Settings
+
+
+BASE_DIR = os.path.dirname(__file__)
 
 
 # crutch for normal button generation
@@ -39,9 +43,9 @@ class Ui(QtWidgets.QMainWindow):
         self.editor_font_size = int(self.config.get("font_size", "12"))
 
         # lets build UI
-        uic.loadUi("./ui/main.ui", self)
+        uic.loadUi(os.path.join(BASE_DIR, "./main.ui"), self)
         self.setWindowTitle("Grid Master")
-        self.setWindowIcon(QIcon("./ui/assets/logo_512.png"))
+        self.setWindowIcon(QIcon(os.path.join(BASE_DIR, "./assets/logo_512.png")))
         self.open_file_btn.clicked.connect(self.open_file)
         self.new_file_btn.clicked.connect(self.create_file)
         self.save_file_btn.clicked.connect(self.save_file)

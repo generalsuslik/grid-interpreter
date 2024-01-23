@@ -18,11 +18,11 @@
 4. Для запуска используем `python main.py` или `python3 main.py`
 
 ## Сборка в исполняемый файл
-1. Переходим в директорию, содержащую этот файл, используя команду `cd <path>`
+1. Переходим в директорию, расположенную на 1 выше, чем та, что содержит этот файл, используя команду `cd <path>`
 2. Создаём новую среду разработки и активируем её `python -m venv .buildvenv`
 3. Активируем её
     + Для Windows `.\.buildvenv\Scripts\activate`
     + Для Linux и MacOS `source ./.buildvenv/bin/activate`
-4. Устанавливаем зависимости `pip install -r prod_requirements.txt`
+4. Устанавливаем зависимости `pip install -r ./grid-interpreter/prod_requirements.txt`
 5. Устанавливаем [Pyinstaller](https://pyinstaller.org/en/stable/) `pip install pyinstaller Pillow`
-6. Собираем исполняемый файл `pyinstaller main.py -w -F -n "Grid Master" -i .\ui\assets\logo_512.png --exclude-module Pillow`
+6. Собираем исполняемый файл `pyinstaller ./grid-interpreter/main.py -w -F -n "Grid Master" -i ./grid-interpreter/ui/assets/logo_512.png --add-data ./grid-interpreter/ui:./ui`
