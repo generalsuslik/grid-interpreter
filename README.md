@@ -27,5 +27,5 @@
 5. Устанавливаем [Pyinstaller](https://pyinstaller.org/en/stable/) `pip install pyinstaller Pillow`
 6. Собираем исполняемый файл `pyinstaller ./grid-interpreter/main.py -w -F -n "Grid Master" -i ./grid-interpreter/ui/assets/logo_512.png --add-data ./grid-interpreter/ui:./ui`
 
-### Видеоматериалы, демонстрирующие работу интерпретатора
+## Видеоматериалы, демонстрирующие работу интерпретатора
 [Ссылка](https://www.youtube.com/watch?v=Pc_LbVsZmGo&ab_channel=%D0%93%D0%B5%D0%BD%D0%B5%D1%80%D0%B0%D0%BB%D0%A1%D1%83%D1%81%D0%BB%D0%B8%D0%BA) на видео
