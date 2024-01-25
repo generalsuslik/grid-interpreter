@@ -1,14 +1,22 @@
-REPEAT 3
-    IFBLOCK RIGHT
-        RIGHT 5
-    ENDIF
+REPEAT 5
+    UP 2
+    RIGHT 1
 ENDREPEAT
 
 UP 10
 
-PROCEDURE MoveLeftAndUp
-    RIGHT 2
-    UP 2
+IFBLOCK UP
+    RIGHT 7
+    DOWN 2
+ENDIF
+
+PROCEDURE MoveRightLeftAndDown
+    DOWN 5
+    LEFT 4
+    SET X = 5
+    DOWN 1
+    RIGHT X
+
 ENDPROC
 
-CALL MoveLeftAndUp
+CALL MoveRightLeftAndDown

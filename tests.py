@@ -62,17 +62,17 @@ class TestInterpreter(unittest.TestCase):
         interpreter = interpreter_file.Interpreter()
 
         try:
-            interpreter.execute("programs_4_reglament/1.txt")
+            interpreter.execute("programs_4_reglament/4_1.txt")
 
         except errors.GridOutOfBounceError as error:
-            self.assertEqual(error.get_message(), "GridOutOfBounceError: "
-                                                  "Invalid direction. It must be between 0 and 20. "
-                                                  "You can't move left 2 times. Your previous position: (0, 10)")
+            self.assertEqual(error.get_message(), "GridOutOfBounceError: Invalid direction. "
+                                                  "It must be between 0 and 20. You can't move down 10 times. "
+                                                  "Your previous position: (0, 0)")
 
     def test_for_reglament_2(self):
         interpreter = interpreter_file.Interpreter()
 
-        result = interpreter.execute("programs_4_reglament/2.txt")
+        result = interpreter.execute("programs_4_reglament/4_2.txt")
 
         self.assertEqual(result, [(0, 0)])
 

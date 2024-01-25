@@ -1,4 +1,4 @@
-SET rad = 0
+SET rad = -1
 
 REPEAT rad
     UP 2

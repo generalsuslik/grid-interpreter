@@ -1,7 +1,7 @@
 REPEAT 5
+    IFBLOCK RIGHT
         REPEAT 3
-			IFBLOCK RIGHT
-				RIGHT 2
-		ENDIF
+            RIGHT 2
         ENDREPEAT
+    ENDIF
 ENDREPEAT

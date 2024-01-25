@@ -1,3 +1,7 @@
+PROCEDURE A
+	UP 2
+ENDPROC
+
 REPEAT 2
 
     SET X = 2
@@ -5,11 +9,7 @@ REPEAT 2
     REPEAT 4
         REPEAT X
 
-            REPEAT 2
-
-                UP X
-
-            ENDREPEAT
+			CALL A
 
         ENDREPEAT
     ENDREPEAT

@@ -2,7 +2,7 @@ PROCEDURE A
 
     SET asd = 5
     REPEAT asd
-        SET X = ytt
+        SET X = yyt
         UP X
     ENDREPEAT
 

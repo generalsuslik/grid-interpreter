@@ -1,17 +1,5 @@
 SET X = 2
 SET Y = 3
 
-PROCEDURE GaySex
-    REPEAT X
-        UP 2
-        REPEAT Y
-            RIGHT 1
-        ENDREPEAT
-    ENDREPEAT
-ENDPROC
-
-IFBLOCK LEFT
-    RIGHT 5
-ENDIF
-
-CALL GaySex
+UP X
+RIGHT Y

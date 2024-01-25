@@ -40,6 +40,10 @@ class Interpreter:
                 try:
 
                     variable_value = int(variable_value)
+                    if variable_value > 1000:
+                        raise errors.WrongSyntaxCommandError(
+                            "You can't declare a variable with value more than 1000"
+                        )
                     self.variables[variable_name] = variable_value
 
                 except ValueError:
@@ -53,6 +57,10 @@ class Interpreter:
                         else:
                             variable_value = self.variables.get(variable_value)
 
+                        if variable_value > 1000:
+                            raise errors.WrongSyntaxCommandError(
+                                "You can't declare a variable with value more than 1000"
+                            )
                         self.variables[variable_name] = variable_value
 
                 self.commands.pop(index)
@@ -121,6 +129,8 @@ class Interpreter:
 
     def check_command(self, command):
         command_split = command.split()
+        if len(command_split) == 0:
+            return True
         command_title = command_split[0]
 
         match command_title:
@@ -224,6 +234,11 @@ class Interpreter:
                         "with negative repeat times number"
                     )
 
+                if n1 > 1000:
+                    raise errors.WrongSyntaxCommandError(
+                        "Maximum value for repeat loop times is 1000"
+                    )
+
                 cycle_body1 = []
                 index += 1
                 while commands_array[index] != "ENDREPEAT":
@@ -267,6 +282,11 @@ class Interpreter:
                             raise errors.IncorrectRepeatDeclarationError(
                                 "You can't create a repeat cycle with "
                                 "with negative repeat times number"
+                            )
+
+                        if n2 > 1000:
+                            raise errors.WrongSyntaxCommandError(
+                                "Maximum value for repeat loop times is 1000"
                             )
 
                         cycle_body2 = []
@@ -319,6 +339,11 @@ class Interpreter:
                                             "with negative repeat times "
                                             "number"
                                         ))
+
+                                if n3 > 1000:
+                                    raise errors.WrongSyntaxCommandError(
+                                        "Maximum value for repeat loop times is 1000"
+                                    )
 
                                 cycle_body3 = []
                                 index += 1
@@ -569,6 +594,11 @@ class Interpreter:
                         "number more then 0"
                     )
 
+                if n1 > 1000:
+                    raise errors.WrongSyntaxCommandError(
+                        "Maximum value for repeat loop times is 1000"
+                    )
+
                 cycle_body1 = []
                 index += 1
                 while self.executable_commands[index] != "ENDREPEAT":
@@ -613,6 +643,11 @@ class Interpreter:
                                 "You can't create an endless repeat"
                                 "Change your repeat times number to a "
                                 "number more then 0"
+                            )
+
+                        if n2 > 1000:
+                            raise errors.WrongSyntaxCommandError(
+                                "Maximum value for repeat loop times is 1000"
                             )
 
                         cycle_body2 = []
@@ -661,6 +696,11 @@ class Interpreter:
                                         "You can't create an endless repeat"
                                         "Change your repeat times number to a "
                                         "number more then 0"
+                                    )
+
+                                if n3 > 1000:
+                                    raise errors.WrongSyntaxCommandError(
+                                        "Maximum value for repeat loop times is 1000"
                                     )
 
                                 cycle_body3 = []
@@ -800,7 +840,7 @@ class Interpreter:
 
                     times_to_move = int(check_time_to_move)
 
-                    if times_to_move <= 0:
+                    if times_to_move <= 0 or times_to_move > 1000:
                         raise errors.WrongSyntaxCommandError(
                             f"You can't move {command_split[0]} {times_to_move} times"
                         )
@@ -852,7 +892,7 @@ class Interpreter:
 
                                 times_to_move1 = check_times_to_move1
 
-                                if times_to_move1 <= 0:
+                                if times_to_move1 <= 0 or times_to_move1 > 1000:
                                     raise errors.WrongSyntaxCommandError(
                                         f"You can't move {command1_split[0]} {times_to_move1} "
                                         f"times"
@@ -908,7 +948,7 @@ class Interpreter:
 
                                             times_to_move2 = check_times_to_move2
 
-                                            if times_to_move2 <= 0:
+                                            if times_to_move2 <= 0 or times_to_move2 > 1000:
                                                 raise errors.WrongSyntaxCommandError(
                                                     f"You can't move {command2_split[0]} "
                                                     f"{times_to_move2} "
@@ -970,7 +1010,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -1033,7 +1073,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -1092,7 +1132,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -1150,7 +1190,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -1205,7 +1245,7 @@ class Interpreter:
 
                                             times_to_move2 = check_times_to_move2
 
-                                            if times_to_move2 <= 0:
+                                            if times_to_move2 <= 0 or times_to_move2 > 1000:
                                                 raise errors.WrongSyntaxCommandError(
                                                     f"You can't move {command2_split[0]} "
                                                     f"{times_to_move2} "
@@ -1267,7 +1307,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -1327,7 +1367,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -1387,7 +1427,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -1445,7 +1485,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -1500,7 +1540,7 @@ class Interpreter:
 
                                             times_to_move2 = check_times_to_move2
 
-                                            if times_to_move2 <= 0:
+                                            if times_to_move2 <= 0 or times_to_move2 > 1000:
                                                 raise errors.WrongSyntaxCommandError(
                                                     f"You can't move {command2_split[0]} "
                                                     f"{times_to_move2} "
@@ -1561,7 +1601,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -1618,7 +1658,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -1677,7 +1717,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -1733,7 +1773,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -1787,7 +1827,7 @@ class Interpreter:
 
                                             times_to_move2 = check_times_to_move2
 
-                                            if times_to_move2 <= 0:
+                                            if times_to_move2 <= 0 or times_to_move2 > 1000:
                                                 raise errors.WrongSyntaxCommandError(
                                                     f"You can't move {command2_split[0]} "
                                                     f"{times_to_move2} "
@@ -1849,7 +1889,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -1908,7 +1948,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -1968,7 +2008,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -2025,7 +2065,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -2079,7 +2119,7 @@ class Interpreter:
 
                                 times_to_move1 = check_times_to_move1
 
-                                if times_to_move1 <= 0:
+                                if times_to_move1 <= 0 or times_to_move1 > 1000:
                                     raise errors.WrongSyntaxCommandError(
                                         f"You can't move {command1_split[0]} {times_to_move1} "
                                         f"times"
@@ -2135,7 +2175,7 @@ class Interpreter:
 
                                             times_to_move2 = check_times_to_move2
 
-                                            if times_to_move2 <= 0:
+                                            if times_to_move2 <= 0 or times_to_move2 > 1000:
                                                 raise errors.WrongSyntaxCommandError(
                                                     f"You can't move {command2_split[0]} "
                                                     f"{times_to_move2} "
@@ -2196,7 +2236,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -2253,7 +2293,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -2314,7 +2354,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -2370,7 +2410,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -2424,7 +2464,7 @@ class Interpreter:
 
                                             times_to_move2 = check_times_to_move2
 
-                                            if times_to_move2 <= 0:
+                                            if times_to_move2 <= 0 or times_to_move2 > 1000:
                                                 raise errors.WrongSyntaxCommandError(
                                                     f"You can't move {command2_split[0]} "
                                                     f"{times_to_move2} "
@@ -2485,7 +2525,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -2542,7 +2582,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -2601,7 +2641,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -2660,7 +2700,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -2718,7 +2758,7 @@ class Interpreter:
 
                                             times_to_move2 = check_times_to_move2
 
-                                            if times_to_move2 <= 0:
+                                            if times_to_move2 <= 0 or times_to_move2 > 1000:
                                                 raise errors.WrongSyntaxCommandError(
                                                     f"You can't move {command2_split[0]} "
                                                     f"{times_to_move2} "
@@ -2780,7 +2820,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -2841,7 +2881,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -2902,7 +2942,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -2960,7 +3000,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -3015,7 +3055,7 @@ class Interpreter:
 
                                             times_to_move2 = check_times_to_move2
 
-                                            if times_to_move2 <= 0:
+                                            if times_to_move2 <= 0 or times_to_move2 > 1000:
                                                 raise errors.WrongSyntaxCommandError(
                                                     f"You can't move {command2_split[0]} "
                                                     f"{times_to_move2} "
@@ -3078,7 +3118,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -3140,7 +3180,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -3202,7 +3242,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -3260,7 +3300,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -3313,7 +3353,7 @@ class Interpreter:
 
                                 times_to_move1 = check_times_to_move1
 
-                                if times_to_move1 <= 0:
+                                if times_to_move1 <= 0 or times_to_move1 > 1000:
                                     raise errors.WrongSyntaxCommandError(
                                         f"You can't move {command1_split[0]} {times_to_move1} "
                                         f"times"
@@ -3370,7 +3410,7 @@ class Interpreter:
 
                                             times_to_move2 = check_times_to_move2
 
-                                            if times_to_move2 <= 0:
+                                            if times_to_move2 <= 0 or times_to_move2 > 1000:
                                                 raise errors.WrongSyntaxCommandError(
                                                     f"You can't move {command2_split[0]} "
                                                     f"{times_to_move2} "
@@ -3432,7 +3472,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -3491,7 +3531,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -3553,7 +3593,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -3611,7 +3651,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -3666,7 +3706,7 @@ class Interpreter:
 
                                             times_to_move2 = check_times_to_move2
 
-                                            if times_to_move2 <= 0:
+                                            if times_to_move2 <= 0 or times_to_move2 > 1000:
                                                 raise errors.WrongSyntaxCommandError(
                                                     f"You can't move {command2_split[0]} "
                                                     f"{times_to_move2} "
@@ -3728,7 +3768,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -3787,7 +3827,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -3848,7 +3888,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -3907,7 +3947,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -3962,7 +4002,7 @@ class Interpreter:
 
                                             times_to_move2 = check_times_to_move2
 
-                                            if times_to_move2 <= 0:
+                                            if times_to_move2 <= 0 or times_to_move2 > 1000:
                                                 raise errors.WrongSyntaxCommandError(
                                                     f"You can't move {command2_split[0]} "
                                                     f"{times_to_move2} "
@@ -4024,7 +4064,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -4083,7 +4123,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -4144,7 +4184,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -4202,7 +4242,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -4257,7 +4297,7 @@ class Interpreter:
 
                                             times_to_move2 = check_times_to_move2
 
-                                            if times_to_move2 <= 0:
+                                            if times_to_move2 <= 0 or times_to_move2 > 1000:
                                                 raise errors.WrongSyntaxCommandError(
                                                     f"You can't move {command2_split[0]} "
                                                     f"{times_to_move2} "
@@ -4320,7 +4360,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -4379,7 +4419,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -4440,7 +4480,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -4498,7 +4538,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -4551,7 +4591,7 @@ class Interpreter:
 
                                 times_to_move1 = check_times_to_move1
 
-                                if times_to_move1 <= 0:
+                                if times_to_move1 <= 0 or times_to_move1 > 1000:
                                     raise errors.WrongSyntaxCommandError(
                                         f"You can't move {command1_split[0]} {times_to_move1} "
                                         f"times"
@@ -4608,7 +4648,7 @@ class Interpreter:
 
                                             times_to_move2 = check_times_to_move2
 
-                                            if times_to_move2 <= 0:
+                                            if times_to_move2 <= 0 or times_to_move2 > 1000:
                                                 raise errors.WrongSyntaxCommandError(
                                                     f"You can't move {command2_split[0]} "
                                                     f"{times_to_move2} "
@@ -4670,7 +4710,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -4729,7 +4769,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -4790,7 +4830,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -4848,7 +4888,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -4904,7 +4944,7 @@ class Interpreter:
 
                                             times_to_move2 = check_times_to_move2
 
-                                            if times_to_move2 <= 0:
+                                            if times_to_move2 <= 0 or times_to_move2 > 1000:
                                                 raise errors.WrongSyntaxCommandError(
                                                     f"You can't move {command2_split[0]} "
                                                     f"{times_to_move2} "
@@ -4966,7 +5006,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -5025,7 +5065,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -5087,7 +5127,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -5148,7 +5188,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -5204,7 +5244,7 @@ class Interpreter:
 
                                             times_to_move2 = check_times_to_move2
 
-                                            if times_to_move2 <= 0:
+                                            if times_to_move2 <= 0 or times_to_move2 > 1000:
                                                 raise errors.WrongSyntaxCommandError(
                                                     f"You can't move {command2_split[0]} "
                                                     f"{times_to_move2} "
@@ -5266,7 +5306,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -5325,7 +5365,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -5386,7 +5426,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -5445,7 +5485,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -5501,7 +5541,7 @@ class Interpreter:
 
                                             times_to_move2 = check_times_to_move2
 
-                                            if times_to_move2 <= 0:
+                                            if times_to_move2 <= 0 or times_to_move2 > 1000:
                                                 raise errors.WrongSyntaxCommandError(
                                                     f"You can't move {command2_split[0]} "
                                                     f"{times_to_move2} "
@@ -5563,7 +5603,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -5625,7 +5665,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -5686,7 +5726,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -5744,7 +5784,7 @@ class Interpreter:
                                                             )
 
                                                         times_to_move3 = check_times_to_move3
-                                                        if times_to_move3 <= 0:
+                                                        if times_to_move3 <= 0 or times_to_move3 > 1000:
                                                             raise errors.WrongSyntaxCommandError(
                                                                 f"You can't move "
                                                                 f"{command3_split[0]} "
@@ -5808,7 +5848,7 @@ class Interpreter:
 
             with open(program_file, "r") as file:
                 for line in file:
-                    if len(line) > 2:
+                    if len(line) > 2 and line != "'\n":
                         self.commands.append(line[:-1].strip())
 
         except Exception:
@@ -5825,5 +5865,5 @@ class Interpreter:
 
 if __name__ == "__main__":
     program = Interpreter()
-    res = program.execute("../test_programs/program2.txt")
+    res = program.execute("../test_programs/program.tt")
     print(res)
